@@ -1,6 +1,35 @@
 {
     "units": "m",
-    "tags": {},
+    "tags": {
+        "Tag 1": {
+            "x": 1.5,
+            "y": 2.1,
+            "sensors": [
+                "temperature",
+                "humidity",
+                "co2",
+                "light",
+                "soil_moisture"
+            ]
+        },
+        "Tag 2": {
+            "x": 2.9,
+            "y": 3.3,
+            "sensors": [
+                "temperature",
+                "co2",
+                "soil_moisture"
+            ]
+        },
+        "Tag 3": {
+            "x": 2.2,
+            "y": 8.3,
+            "sensors": [
+                "humidity",
+                "light"
+            ]
+        }
+    },
     "tables": {
         "Table 1": {
             "x0": 1.1,
