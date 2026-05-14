@@ -1,0 +1,18 @@
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env/
+venv/
+.venv/
+.local/
+
+# ROS2 build outputs
+build/
+install/
+log/
+
+# System files
+.DS_Store

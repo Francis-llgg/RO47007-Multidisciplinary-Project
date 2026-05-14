@@ -91,3 +91,53 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+
+## Set up Virtual Greenhouse environment
+
+This project uses the `mdp-greenhouse` Python package to create, edit, and read a virtual greenhouse layout. The shared greenhouse configuration files are stored in the `greenhouse_setup/` folder.
+
+### 1. Install dependencies
+
+From the root directory of this repository, run:
+
+```bash
+python3 -m pip install --user -r requirements.txt
+```
+
+If the `mdp-greenhouse` command is not found after installation, add the local Python binary folder to your PATH:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+### 2. View the greenhouse layout
+
+```bash
+mdp-greenhouse --view greenhouse_setup
+```
+
+### 3. Edit the greenhouse layout
+
+```bash
+mdp-greenhouse --edit greenhouse_setup
+```
+
+This opens the graphical editor, where tables and sensor tags can be placed or modified. After editing, save the changes so that `greenhouse_config.yaml` and `tag_locations.json` are updated.
+
+### 4. Read sensor tag data
+
+List all available tags:
+
+```bash
+mdp-greenhouse --read --list-tags --config-folder greenhouse_setup
+```
+
+Read data from a specific tag:
+
+```bash
+mdp-greenhouse --read <tag_id> --config-folder greenhouse_setup
+```
+
+Replace `<tag_id>` with the actual tag ID shown in the tag list.
