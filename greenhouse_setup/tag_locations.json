@@ -28,6 +28,11 @@
                 "humidity",
                 "light"
             ]
+        },
+        "Tag 4": {
+            "x": 3.0,
+            "y": 2.1,
+            "sensors": []
         }
     },
     "tables": {

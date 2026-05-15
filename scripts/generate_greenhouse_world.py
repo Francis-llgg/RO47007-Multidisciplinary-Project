@@ -12,7 +12,7 @@ TAGS_PATH = REPO_ROOT / "greenhouse_setup" / "tag_locations.json"
 WORLD_PATH = REPO_ROOT / "worlds" / "greenhouse.world"
 
 
-TABLE_HEIGHT = 0.75
+TABLE_HEIGHT = 0.5
 WALL_HEIGHT = 1.2
 WALL_THICKNESS = 0.08
 
