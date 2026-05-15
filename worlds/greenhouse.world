@@ -1,0 +1,516 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="greenhouse_world">
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    
+    <model name="greenhouse_floor">
+      <static>true</static>
+      <pose>2.500 5.000 -0.010 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>5.000 10.000 0.020</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>5.000 10.000 0.020</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.75 0.75 0.75 1</ambient>
+            <diffuse>0.75 0.75 0.75 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="wall_left">
+      <static>true</static>
+      <pose>-0.040 5.000 0.600 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.080 10.000 1.200</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.080 10.000 1.200</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="wall_right">
+      <static>true</static>
+      <pose>5.040 5.000 0.600 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.080 10.000 1.200</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.080 10.000 1.200</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="wall_bottom">
+      <static>true</static>
+      <pose>2.500 -0.040 0.600 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>5.000 0.080 1.200</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>5.000 0.080 1.200</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="wall_top">
+      <static>true</static>
+      <pose>2.500 10.040 0.600 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>5.000 0.080 1.200</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>5.000 0.080 1.200</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="table_1">
+      <static>true</static>
+      <pose>1.650 2.125 0.250 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.25 0.65 0.25 1</ambient>
+            <diffuse>0.25 0.65 0.25 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="table_2">
+      <static>true</static>
+      <pose>1.650 3.325 0.250 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.25 0.65 0.25 1</ambient>
+            <diffuse>0.25 0.65 0.25 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="table_3">
+      <static>true</static>
+      <pose>1.650 4.625 0.250 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.25 0.65 0.25 1</ambient>
+            <diffuse>0.25 0.65 0.25 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="table_4">
+      <static>true</static>
+      <pose>1.650 5.925 0.250 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.25 0.65 0.25 1</ambient>
+            <diffuse>0.25 0.65 0.25 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="table_5">
+      <static>true</static>
+      <pose>2.850 2.125 0.250 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.25 0.65 0.25 1</ambient>
+            <diffuse>0.25 0.65 0.25 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="table_6">
+      <static>true</static>
+      <pose>2.850 3.325 0.250 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.25 0.65 0.25 1</ambient>
+            <diffuse>0.25 0.65 0.25 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="table_7">
+      <static>true</static>
+      <pose>2.850 4.625 0.250 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.25 0.65 0.25 1</ambient>
+            <diffuse>0.25 0.65 0.25 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="table_8">
+      <static>true</static>
+      <pose>2.850 5.925 0.250 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.25 0.65 0.25 1</ambient>
+            <diffuse>0.25 0.65 0.25 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="table_9">
+      <static>true</static>
+      <pose>2.250 7.325 0.250 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.100 0.350 0.500</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.25 0.65 0.25 1</ambient>
+            <diffuse>0.25 0.65 0.25 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="table_10">
+      <static>true</static>
+      <pose>2.225 8.650 0.250 0 0 0</pose>
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.350 1.100 0.500</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.350 1.100 0.500</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.25 0.65 0.25 1</ambient>
+            <diffuse>0.25 0.65 0.25 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="tag_1">
+      <static>true</static>
+      <pose>1.500 2.100 0.550 0 0 0</pose>
+      <link name="link">
+
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.080</radius>
+              <length>0.040</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="tag_2">
+      <static>true</static>
+      <pose>2.900 3.300 0.550 0 0 0</pose>
+      <link name="link">
+
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.080</radius>
+              <length>0.040</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="tag_3">
+      <static>true</static>
+      <pose>2.200 8.300 0.550 0 0 0</pose>
+      <link name="link">
+
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.080</radius>
+              <length>0.040</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="tag_4">
+      <static>true</static>
+      <pose>3.000 2.100 0.550 0 0 0</pose>
+      <link name="link">
+
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.080</radius>
+              <length>0.040</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+
+  </world>
+</sdf>

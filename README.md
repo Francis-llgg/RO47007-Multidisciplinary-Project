@@ -1,6 +1,99 @@
 # mdp_mirte_master
 
 
+## Set up Virtual Greenhouse Environment
+
+This project uses `mdp-greenhouse` to define the virtual greenhouse layout. The layout is stored in `greenhouse_setup/`, then converted into a Gazebo world file using a Python script.
+
+### 1. Install dependencies
+
+From the root directory of this repository, run:
+
+```bash
+python3 -m pip install --user -r requirements.txt
+```
+
+If the `mdp-greenhouse` command is not found, add the local Python binary folder to your PATH:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+### 2. Edit the greenhouse layout
+
+Open the greenhouse editor:
+
+```bash
+mdp-greenhouse --edit greenhouse_setup
+```
+
+In this editor, tables and sensor tags can be added or modified. After saving, the files in `greenhouse_setup/` will be updated:
+
+```text
+greenhouse_config.yaml
+tag_locations.json
+```
+
+To quickly check the layout:
+
+```bash
+mdp-greenhouse --view greenhouse_setup
+```
+
+### 3. Generate the Gazebo world
+
+After editing the greenhouse layout, generate the Gazebo world file:
+
+```bash
+python3 scripts/generate_greenhouse_world.py
+```
+
+This creates or updates:
+
+```text
+worlds/greenhouse.world
+```
+
+### 4. Launch MIRTE in the greenhouse world
+
+Start the MIRTE Gazebo simulation with the generated greenhouse world:
+
+```bash
+ros2 launch mirte_gazebo gazebo_mirte_master_empty.launch.xml \
+  world:=$(pwd)/worlds/greenhouse.world
+```
+
+Make sure this command is executed from the root directory of this repository.
+
+### 5. Read virtual sensor tag data
+
+List all available tags:
+
+```bash
+mdp-greenhouse --read --list-tags --config-folder greenhouse_setup
+```
+
+Read data from a specific tag:
+
+```bash
+mdp-greenhouse --read <tag_id> --config-folder greenhouse_setup
+```
+
+Replace `<tag_id>` with the actual tag ID shown in the tag list.
+
+### Workflow summary
+
+```text
+Edit layout in mdp-greenhouse
+        ↓
+Save greenhouse_setup files
+        ↓
+Generate worlds/greenhouse.world
+        ↓
+Launch MIRTE with the generated Gazebo world
+```
+
 
 ## Getting started
 
@@ -91,3 +184,5 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+

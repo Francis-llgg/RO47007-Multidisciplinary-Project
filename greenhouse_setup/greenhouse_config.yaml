@@ -1,0 +1,137 @@
+version: 1.0
+
+time:
+  speedup_factor: 1800       # 1 real second = 0.5 sim hour
+  debug_mode: false           # if true, fixed time of day is used
+  debug_time_of_day: 12.0     # time of day in hours (0-24) when debug_mode is true
+  debug_seed: 42                # random seed for reproducibility in debug mode
+
+sensors:
+  temperature:
+    - "value_at_midnight": 18
+      "value_at_noon": 26
+      "noise_sigma": 0
+      "decay_distance": 10.67
+      "decay_type": "linear"
+      "position": [5., 5.83]
+      "angle": 10
+      "dynamics": "radial"
+    - "value_at_midnight": 19
+      "value_at_noon": 27
+      "noise_sigma": 0
+      "decay_distance": 2.0
+      "decay_type": "quadratic"
+      "position": [1.33, 5.33]
+      "angle": 10
+      "dynamics": "linear"
+  humidity:
+    - "value_at_midnight": 40
+      "value_at_noon": 60
+      "noise_sigma": 1
+      "decay_distance": 10.67
+      "decay_type": "linear"
+      "position": [2.5, 2.5]
+      "angle": 45
+      "dynamics": "radial"
+    - "value_at_midnight": 45
+      "value_at_noon": 75
+      "noise_sigma": 1
+      "decay_distance": 2.0
+      "decay_type": "quadratic"
+      "position": [2.5, 5.]
+      "angle": 45
+      "dynamics": "radial"
+    - "value_at_midnight": 40
+      "value_at_noon": 65
+      "noise_sigma": 1
+      "decay_distance": 10.67
+      "decay_type": "linear"
+      "position": [ 2.5, 7.5 ]
+      "angle": 45
+      "dynamics": "radial"
+  co2:
+    - "value_at_midnight": 400
+      "value_at_noon": 600
+      "noise_sigma": 30
+      "decay_distance": 10.67
+      "decay_type": "linear"
+      "position": [0., 5.]
+      "angle": 0
+      "dynamics": "uniform"
+    - "value_at_midnight": 400
+      "value_at_noon": 800
+      "noise_sigma": 30
+      "decay_distance": 10.67
+      "decay_type": "square"
+      "position": [ 0., 5. ]
+      "angle": 0
+      "dynamics": "radial"
+  light:
+    - "value_at_midnight": 800
+      "value_at_noon": 1000
+      "noise_sigma": 5
+      "decay_distance": 20
+      "decay_type": "linear"
+      "position": [2., 5]
+      "angle": 0
+      "dynamics": "linear"
+    - "value_at_midnight": 800
+      "value_at_noon": 800
+      "noise_sigma": 10
+      "decay_distance": 20
+      "decay_type": "linear"
+      "position": [ 2., 1.0 ]
+      "angle": 0
+      "dynamics": "linear"
+    - "value_at_midnight": 800
+      "value_at_noon": 800
+      "noise_sigma": 10
+      "decay_distance": 20
+      "decay_type": "linear"
+      "position": [ 2., 8.0 ]
+      "angle": 0
+      "dynamics": "linear"
+  soil_moisture:
+    - "value_at_midnight": 0.3
+      "value_at_noon": 0.6
+      "noise_sigma": 0
+      "decay_distance": 30.0
+      "decay_type": "linear"
+      "position": [2.5, 3.5]
+      "angle": 10
+      "dynamics": "radial"
+    - "value_at_midnight": 0.3
+      "value_at_noon": 0.5
+      "noise_sigma": 0
+      "decay_distance": 2.0
+      "decay_type": "linear"
+      "position": [ 2.5, 2.5 ]
+      "angle": 10
+      "dynamics": "uniform"
+
+visualization:
+  greenhouse_width_m: 5
+  greenhouse_height_m: 10
+  grid_spacing_m: 1.0
+  snap_step_m: 0.1
+  mesh_cell_m: 0.25
+  table_default_w_m: 1.1
+  table_default_h_m: 0.25
+  canvas_padding_px: 24
+  colorbar_ranges:
+    temperature:
+      min: 0.0
+      max: 30.0
+    humidity:
+      min: 0.0
+      max: 100.0
+    co2:
+      min: 300.0
+      max: 800.0
+    light:
+      min: 600.0
+      max: 1100.0
+    soil_moisture:
+      min: 0.2
+      max: 0.8
+
