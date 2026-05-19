@@ -100,13 +100,56 @@ A React-based dashboard for monitoring and controlling the MIRTE robot in a ROS2
 
 ### Install dashboard dependencies
 
-Go to dashboard folder:
+This project requires **Node.js 22**. Check your version:
+
+```bash
+node -v
+npm -v
+```
+
+Expected output:
+```bash
+v22.x.x
+10.x.x
+```
+
+If versions correct: continue to step 1
+
+If **npm** not installed:
+
+```bash
+sudo apt install npm
+```
+
+If **node** not installed:
+
+```bash
+sudo apt install nodejs
+```
+
+Verify version:
+```bash
+node -v
+npm -v
+```
+
+If versions incorrect: install **nvm** version 22:
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+source ~/.bashrc
+nvm install 22
+nvm use 22
+nvm alias default 22
+```
+
+1. Go to dashboard folder:
 
 ```bash
 cd mirte_dashboard
 ```
 
-Install required packages:
+2. Install required packages:
 ```bash
 npm install
 ```
@@ -126,7 +169,7 @@ npm run dev -- --host
 
 ### Opening the Dashboard
 
-1. On your laptop/desktop
+1. On your laptop/desktop browser open:
 ```text
 http://localhost:5173
 ```
