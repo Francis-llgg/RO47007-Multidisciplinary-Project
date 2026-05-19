@@ -94,6 +94,44 @@ Generate worlds/greenhouse.world
 Launch MIRTE with the generated Gazebo world
 ```
 
+## Set up MIRTE Dashboard
+
+A React-based dashboard for monitoring and controlling the MIRTE robot in a ROS2 + Gazebo simulation.
+
+### Install dashboard dependencies
+
+Go to dashboard folder:
+
+```bash
+cd mirte_dashboard
+```
+
+Install required packages:
+```bash
+npm install
+```
+
+### Running the Dashboard
+
+1. Start the MIRTE simulation in Gazebo
+2. In a seperate terminal: Start rosbridge
+```bash
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+```
+3. In a seperate terminal: Start the React dashboard
+```bash
+cd mirte_dashboard
+npm run dev -- --host
+```
+
+### Opening the Dashboard
+
+1. On your laptop/desktop
+```text
+http://localhost:5173
+```
+
+---
 
 ## Getting started
 
