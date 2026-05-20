@@ -176,6 +176,196 @@ http://localhost:5173
 
 ---
 
+## Mapping and Saving Greenhouse Map
+
+This section explains how to start the greenhouse simulation, run SLAM mapping, manually control the robot, save the map, and load the saved map again.
+
+### 1. Build and source the workspace
+
+```bash
+cd ~/ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install
+source install/setup.bash
+````
+
+Every new terminal should run:
+
+```bash
+cd ~/ros2_ws
+source /opt/ros/humble/setup.bash
+source install/setup.bash
+```
+
+
+### 2. Launch MIRTE in the greenhouse world
+
+Run this command from the root directory of this repository:
+
+```bash
+ros2 launch mirte_gazebo gazebo_mirte_master_empty.launch.xml world:=$(pwd)/worlds/greenhouse.world
+```
+
+Check required topics:
+
+```bash
+ros2 topic list
+```
+
+The following topics should exist:
+
+```text
+/scan
+/odom
+/tf
+/tf_static
+```
+
+
+### 3. Start SLAM mapping
+
+Open a new terminal:
+
+```bash
+ros2 launch mdp_mapping mapping.launch.py use_sim_time:=true
+```
+
+<!-- This starts:
+
+```text
+slam_toolbox
+mapping_manager_node
+```
+
+Check whether the map is being published:
+
+```bash
+ros2 topic echo --once /map
+``` -->
+
+
+### 4. Visualize the map in RViz
+
+Open a new terminal:
+
+```bash
+rviz2
+```
+
+In RViz:
+
+```text
+Fixed Frame: map
+```
+
+Add:
+
+```text
+/map
+/scan
+TF
+```
+
+### 5. Manually control the robot
+
+Open a new terminal:
+
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap cmd_vel:=/mirte_base_controller/cmd_vel_unstamped
+```
+Drive the robot slowly around the greenhouse until the map looks complete in RViz.
+
+### 6. Save the map
+
+When the map is complete, run:
+
+```bash
+ros2 service call /save_map std_srvs/srv/Trigger {}
+```
+
+The saved map will contain two files:
+
+```text
+greenhouse_map_YYYYMMDD_HHMMSS.yaml
+greenhouse_map_YYYYMMDD_HHMMSS.pgm
+```
+
+Check saved maps:
+
+```bash
+ls ~/ros2_ws/install/mdp_mapping/share/mdp_mapping/maps
+```
+
+### 7. Load a saved map
+
+Replace the file name with the actual saved map name:
+
+```bash
+ros2 run nav2_map_server map_server --ros-args \
+  -p yaml_filename:=/home/zheng/ros2_ws/install/mdp_mapping/share/mdp_mapping/maps/greenhouse_map_YYYYMMDD_HHMMSS.yaml \
+  -p use_sim_time:=true
+```
+
+Activate the map server:
+
+```bash
+ros2 lifecycle set /map_server configure
+ros2 lifecycle set /map_server activate
+```
+
+Check the loaded map:
+
+```bash
+ros2 topic echo --once /map
+```
+
+View it in RViz:
+
+```bash
+rviz2
+```
+
+Set:
+
+```text
+Fixed Frame: map
+```
+
+Add:
+
+```text
+/map
+```
+
+---
+---
+
+### Workflow summary
+
+```text
+Launch greenhouse simulation
+        ↓
+Start mapping.launch.py
+        ↓
+Control robot manually
+        ↓
+Check /map in RViz
+        ↓
+Call /save_map
+        ↓
+Load saved map with nav2_map_server
+```
+
+
+
+
+
+
+
+
+
+
+
 ## Getting started
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
