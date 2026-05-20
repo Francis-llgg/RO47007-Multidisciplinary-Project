@@ -197,15 +197,13 @@ source /opt/ros/humble/setup.bash
 source install/setup.bash
 ```
 
----
 
 ### 2. Launch MIRTE in the greenhouse world
 
 Run this command from the root directory of this repository:
 
 ```bash
-ros2 launch mirte_gazebo gazebo_mirte_master_empty.launch.xml \
-  world:=$(pwd)/worlds/greenhouse.world
+ros2 launch mirte_gazebo gazebo_mirte_master_empty.launch.xml world:=$(pwd)/worlds/greenhouse.world
 ```
 
 Check required topics:
@@ -223,21 +221,16 @@ The following topics should exist:
 /tf_static
 ```
 
----
 
 ### 3. Start SLAM mapping
 
 Open a new terminal:
 
 ```bash
-cd ~/ros2_ws
-source /opt/ros/humble/setup.bash
-source install/setup.bash
-
 ros2 launch mdp_mapping mapping.launch.py use_sim_time:=true
 ```
 
-This starts:
+<!-- This starts:
 
 ```text
 slam_toolbox
@@ -248,19 +241,14 @@ Check whether the map is being published:
 
 ```bash
 ros2 topic echo --once /map
-```
+``` -->
 
----
 
 ### 4. Visualize the map in RViz
 
 Open a new terminal:
 
 ```bash
-cd ~/ros2_ws
-source /opt/ros/humble/setup.bash
-source install/setup.bash
-
 rviz2
 ```
 
@@ -278,37 +266,14 @@ Add:
 TF
 ```
 
----
-
 ### 5. Manually control the robot
 
 Open a new terminal:
 
 ```bash
-cd ~/ros2_ws
-source /opt/ros/humble/setup.bash
-source install/setup.bash
-
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap cmd_vel:=/mirte_base_controller/cmd_vel_unstamped
 ```
-
-If the robot does not move, check the velocity topic:
-
-```bash
-ros2 topic list | grep cmd
-ros2 topic list | grep vel
-```
-
-If needed, remap `/cmd_vel`:
-
-```bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard \
-  --ros-args -r /cmd_vel:=/your_robot_cmd_vel
-```
-
 Drive the robot slowly around the greenhouse until the map looks complete in RViz.
-
----
 
 ### 6. Save the map
 
@@ -330,8 +295,6 @@ Check saved maps:
 ```bash
 ls ~/ros2_ws/install/mdp_mapping/share/mdp_mapping/maps
 ```
-
----
 
 ### 7. Load a saved map
 
@@ -374,6 +337,7 @@ Add:
 /map
 ```
 
+---
 ---
 
 ### Workflow summary
