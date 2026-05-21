@@ -1,0 +1,7 @@
+image: greenhouse_map_20260521_231830.pgm
+mode: trinary
+resolution: 0.05
+origin: [-0.0377, -0.0278, 0]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.25
