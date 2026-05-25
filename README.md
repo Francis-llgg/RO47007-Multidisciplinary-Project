@@ -1,5 +1,16 @@
 # mdp_mirte_master
 
+This repository contains the ROS 2 software, simulation setup, mapping/localization tools, dashboard, and perception pipeline for the Group 01 MDP MIRTE Master greenhouse project. The system is developed for ROS 2 Humble and supports both simulation-based testing and robot-side operation with MIRTE.
+
+## Repository overview
+
+- `greenhouse_setup/`: greenhouse layout and tag configuration files.
+- `worlds/`: generated Gazebo greenhouse worlds.
+- `scripts/`: helper scripts, including world generation.
+- `mirte_dashboard/`: React dashboard for robot monitoring and control.
+- `mdp_mapping/`: mapping workflow and map saving tools.
+- `mdp_localization/`: localization configuration.
+- `flower_detector/`: YOLO flower/bug detection, AprilTag integration, and combined perception visualization.
 
 ## Set up Virtual Greenhouse Environment
 
@@ -176,6 +187,259 @@ http://localhost:5173
 
 ---
 
+## Flower and AprilTag Combined Perception Pipeline
+
+The `flower_detector` package runs the greenhouse perception pipeline. It combines:
+
+- YOLO-based detection for flowers and bugs,
+- AprilTag detection for greenhouse/station references,
+- a combined visualizer that overlays all detections on a single image topic.
+
+The final visualization is published on:
+
+```text
+/perception/image_combined
+```
+
+### Package contents
+
+```text
+flower_detector/
+├── flower_detector/
+│   ├── yolo_flower_detector.py
+│   └── combined_visualizer.py
+├── launch/
+│   ├── laptop_combined_perception.launch.py
+│   └── mirte_combined_perception.launch.py
+├── models/
+│   └── best.pt
+├── package.xml
+└── setup.py
+```
+
+### Perception topic structure
+
+For laptop-camera testing:
+
+```text
+/camera/image_raw
+    ├── AprilTag detector       → /camera/tags
+    ├── YOLO flower detector    → /flower_detector/detections
+    └── Combined visualizer     → /perception/image_combined
+```
+
+For MIRTE operation:
+
+```text
+/gripper_camera/image_raw
+    ├── AprilTag detector       → /gripper_camera/tags
+    ├── YOLO flower detector    → /flower_detector/detections
+    └── Combined visualizer     → /perception/image_combined
+```
+
+### Install perception dependencies
+
+Install the required ROS 2 packages:
+
+```bash
+sudo apt update
+
+sudo apt install python3-pip \
+                 ros-humble-cv-bridge \
+                 ros-humble-vision-msgs \
+                 ros-humble-rqt-image-view \
+                 ros-humble-v4l2-camera \
+                 ros-humble-apriltag-detector \
+                 ros-humble-apriltag-draw \
+                 ros-humble-apriltag-detector-umich \
+                 ros-humble-apriltag-detector-mit
+```
+
+Install the Python dependencies:
+
+```bash
+pip install ultralytics opencv-python
+```
+
+If `cv_bridge` crashes with a NumPy-related error, use:
+
+```bash
+pip install --user --force-reinstall "numpy==1.26.4"
+```
+
+### Build the perception package
+
+From the workspace root:
+
+```bash
+cd ~/ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install --packages-select flower_detector
+source install/setup.bash
+```
+
+Check that the launch files are available:
+
+```bash
+ros2 launch flower_detector laptop_combined_perception.launch.py --show-args
+ros2 launch flower_detector mirte_combined_perception.launch.py --show-args
+```
+
+Check that the YOLO model is installed with the package:
+
+```bash
+ls ~/ros2_ws/install/flower_detector/share/flower_detector/models/best.pt
+```
+
+### Run perception with the laptop camera
+
+Use this mode for testing without MIRTE:
+
+```bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+ros2 launch flower_detector laptop_combined_perception.launch.py
+```
+
+To view the combined output:
+
+```bash
+source /opt/ros/humble/setup.bash
+ros2 run rqt_image_view rqt_image_view
+```
+
+Select:
+
+```text
+/perception/image_combined
+```
+
+Optional confidence override:
+
+```bash
+ros2 launch flower_detector laptop_combined_perception.launch.py confidence:=0.60
+```
+
+### Run perception with MIRTE
+
+First start the MIRTE gripper camera. The perception pipeline expects this topic:
+
+```text
+/gripper_camera/image_raw
+```
+
+On MIRTE:
+
+```bash
+source /opt/ros/humble/setup.bash
+export ROS_DOMAIN_ID=0
+
+# Start the MIRTE gripper camera node/launch here.
+```
+
+Check on MIRTE:
+
+```bash
+ros2 topic list | grep image
+ros2 topic hz /gripper_camera/image_raw
+```
+
+On the laptop, check that the MIRTE camera topic is visible:
+
+```bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+export ROS_DOMAIN_ID=0
+
+ros2 daemon stop
+ros2 daemon start
+
+ros2 topic list | grep image
+ros2 topic hz /gripper_camera/image_raw
+```
+
+Then launch the full MIRTE perception pipeline on the laptop:
+
+```bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+export ROS_DOMAIN_ID=0
+
+ros2 launch flower_detector mirte_combined_perception.launch.py
+```
+
+To view the combined output:
+
+```bash
+source /opt/ros/humble/setup.bash
+export ROS_DOMAIN_ID=0
+ros2 run rqt_image_view rqt_image_view
+```
+
+Select:
+
+```text
+/perception/image_combined
+```
+
+### Useful perception checks
+
+List relevant perception topics:
+
+```bash
+ros2 topic list | grep -E "camera|gripper|flower|tag|perception"
+```
+
+Check AprilTag detections with the laptop camera:
+
+```bash
+ros2 topic echo /camera/tags
+```
+
+Check AprilTag detections with the MIRTE gripper camera:
+
+```bash
+ros2 topic echo /gripper_camera/tags
+```
+
+Check YOLO detections:
+
+```bash
+ros2 topic echo /flower_detector/detections
+```
+
+Check combined image rate:
+
+```bash
+ros2 topic hz /perception/image_combined
+```
+
+### Detection colors
+
+The combined visualizer uses the following overlay colors:
+
+```text
+tulip_red    → blue
+tulip_white  → cyan
+tulip_pink   → light gray
+bug          → cyan
+AprilTags    → red
+```
+
+### Notes
+
+The AprilTag detector itself is not implemented in this repository. It is used as an external ROS 2 dependency through `ros-humble-apriltag-detector`.
+
+The YOLO weights are included in:
+
+```text
+flower_detector/models/best.pt
+```
+
+Both launch files use a package-relative model path, so the pipeline does not depend on a user-specific local training path.
+
+---
+
 ## Mapping and Saving Greenhouse Map
 
 ### 1. Build and source the workspace
@@ -185,7 +449,7 @@ cd ~/ros2_ws
 source /opt/ros/humble/setup.bash
 colcon build --symlink-install
 source install/setup.bash
-````
+```
 
 Every new terminal should run:
 
@@ -301,7 +565,7 @@ After finishing the mapping process, open a new terminal and run:
 
 ```bash
 ros2 service call /save_map std_srvs/srv/Trigger {}
-````
+```
 
 This command saves all map outputs generated by the mapping workflow, including the serialized pose graph, the raw occupancy map, and the filtered occupancy map.
 
@@ -456,104 +720,46 @@ Call /save_map
 Load saved map with nav2_map_server
 ```
 
+---
 
+## General development workflow
 
+After pulling new code or changing packages, rebuild and source the workspace:
 
-
-
-
-
-
-
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.tudelft.nl/cor/ro47007/2026/group_01/mdp_mirte_master.git
-git branch -M main
-git push -uf origin main
+```bash
+cd ~/ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install
+source install/setup.bash
 ```
 
-## Integrate with your tools
+Every new terminal should source ROS 2 and the workspace before running package commands:
 
-* [Set up project integrations](https://gitlab.tudelft.nl/cor/ro47007/2026/group_01/mdp_mirte_master/-/settings/integrations)
-
-## Collaborate with your team
-
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+```bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+```
 
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Development should be done on feature branches. Create a branch from `main`, commit changes there, push the branch to GitLab, and open a merge request when the feature is ready for review.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Example:
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+```bash
+git checkout main
+git pull origin main
+git checkout -b feature/<feature_name>
+# make changes
+git add <changed_files>
+git commit -m "Describe the change"
+git push -u origin feature/<feature_name>
+```
 
-## License
-For open source projects, say how it is licensed.
+## Support
+
+For project-specific questions, contact the Group 01 team members or use the project communication channel agreed by the team. For general ROS issues, include the command used, the full terminal output, and the relevant topic/node names when asking for help.
 
 ## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
 
-
+This repository is under active development during the RO47007 Multidisciplinary Project.
