@@ -16,7 +16,7 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument(
             'model_path',
-            default_value='/home/nikolaos/mdp_flower_detection/runs/detect/runs/detect/yolo11s_new/weights/best.pt',
+            default_value=PathJoinSubstitution([FindPackageShare('flower_detector'),'models','best.pt']),
             description='Path to the YOLO flower detector weights'
         ),
 
