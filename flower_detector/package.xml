@@ -12,6 +12,8 @@
   <depend>vision_msgs</depend>
   <depend>cv_bridge</depend>
   <depend>apriltag_msgs</depend>
+  <depend>apriltag_detector</depend>
+
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
