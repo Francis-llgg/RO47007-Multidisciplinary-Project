@@ -9,7 +9,7 @@ slam_toolbox:
     base_frame: base_link
     scan_topic: /scan
 
-    map_file_name: /home/zheng/ros2_ws/src/mdp_mirte_master/mdp_mapping/maps/greenhouse_map_slam_toolbox
+    map_file_name: /home/zheng/ros2_ws/src/mdp_mirte_master/maps/greenhouse_map_slam_toolbox
     map_start_pose: [0.0, 0.0, 0.0]
     map_start_at_dock: true
 
