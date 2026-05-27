@@ -45,9 +45,25 @@ def generate_launch_description():
                 "use_sim_time": use_sim_time,
                 "map_save_dir": map_save_dir,
                 "map_name": map_name,
-                "scan_topic": "/scan",
+                # Subscribe to filtered scan published by filter node
+                "scan_topic": "/scan_filtered",
                 "odom_topic": "/odom",
                 "map_topic": "/map",
+            }
+        ],
+    )
+
+    scan_filter_node = Node(
+        package="mdp_mapping",
+        executable="scan_self_filter_node",
+        name="scan_self_filter_node",
+        output="screen",
+        parameters=[
+            {
+                "use_sim_time": use_sim_time,
+                "input_scan_topic": "/scan",
+                "output_scan_topic": "/scan_filtered",
+                "self_clear_radius": 0.15,
             }
         ],
     )
@@ -66,5 +82,7 @@ def generate_launch_description():
         ),
 
         slam_toolbox_launch,
+        scan_filter_node,
         mapping_manager_node,
     ])
+ 
