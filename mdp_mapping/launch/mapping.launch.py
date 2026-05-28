@@ -47,7 +47,7 @@ def generate_launch_description():
                 "map_name": map_name,
                 # Subscribe to filtered scan published by filter node
                 "scan_topic": "/scan_filtered",
-                "odom_topic": "/odom",
+                "odom_topic": "/mirte_base_controller/odom",
                 "map_topic": "/map",
             }
         ],
