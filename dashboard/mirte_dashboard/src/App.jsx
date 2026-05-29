@@ -8,7 +8,7 @@ import RobotStatusPanel from './Panels/RobotStatusPanel.jsx';
 import ClickedPointPanel from './Panels/ClickedPointPanel.jsx';
 
 export default function App() {
-  const {connected, map, robotPos, moveRobot, } = useROS();
+  const {connected, map, robotPos, moveRobot, battery, } = useROS();
 
   const [clickedPoint, setClickedPoint] = useState(null);
 
@@ -26,6 +26,7 @@ export default function App() {
           <RobotStatusPanel
             connected={connected}
             robotPos={robotPos}
+            battery={battery}
           />
 
           <ClickedPointPanel

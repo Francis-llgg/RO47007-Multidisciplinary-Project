@@ -3,6 +3,7 @@ import Panel from './Panel';
 export default function RobotStatusPanel({
   connected,
   robotPos,
+  battery
 }) {
   return (
     <Panel title="Robot Status">
@@ -34,7 +35,7 @@ export default function RobotStatusPanel({
 
       <div className="statusRow">
         <span>Battery</span>
-        <span>--%</span>
+        <span>{battery.percentage.toFixed(2)}%</span>
       </div>
     </Panel>
   );

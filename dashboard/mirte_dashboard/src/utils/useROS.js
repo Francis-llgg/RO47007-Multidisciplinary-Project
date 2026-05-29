@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import * as ROSLIB from 'roslib';
 import { quaternionToYaw } from './math';
 
@@ -10,12 +10,14 @@ export default function useROS() {
     y: 0,
     yaw: 0,
   });
-
-  const [cmdVelTopic, setCmdVelTopic] = useState(null);
+  const [battery, setBattery] = useState({
+    percentage: 0,
+  })
+  const cmdVelTopic = useRef(null);
 
   useEffect(() => {
     const ros = new ROSLIB.Ros({
-      url: 'ws://localhost:9090',
+      url: 'ws://192.168.43.204:9090',
     });
 
     ros.on('connection', () => {
@@ -28,6 +30,19 @@ export default function useROS() {
     });
 
     ros.on('error', console.error);
+
+    const batteryTopic = new ROSLIB.Topic({
+      ros,
+      name: '/io/power/power_watcher',
+      messageType: 'sensor_msgs/BatteryState',
+    });
+
+    batteryTopic.subscribe((msg) => {
+      console.log("battery update:", msg.percentage);
+      setBattery({
+        percentage: msg.percentage * 100
+      });
+    });
 
     const mapTopic = new ROSLIB.Topic({
       ros,
@@ -53,15 +68,14 @@ export default function useROS() {
       });
     });
 
-    const cmdTopic = new ROSLIB.Topic({
+    cmdVelTopic.current = new ROSLIB.Topic({
       ros,
-      name: '/mirte_base_controller/cmd_vel_unstamped',
+      name: '/mirte_base_controller/cmd_vel',
       messageType: 'geometry_msgs/Twist',
     });
 
-    setCmdVelTopic(cmdTopic);
-
     return () => {
+      batteryTopic.unsubscribe();
       mapTopic.unsubscribe();
       odomTopic.unsubscribe();
       ros.close();
@@ -69,9 +83,10 @@ export default function useROS() {
   }, []);
 
   function moveRobot(linearX, angularZ) {
-    if (!cmdVelTopic) return;
+    if (!cmdVelTopic.current) return;
 
-    cmdVelTopic.publish({
+    console.log("Publishing cmd vel", linearX, angularZ, cmdVelTopic.current);
+    cmdVelTopic.current.publish({
       linear: {
         x: linearX,
         y: 0,
@@ -90,5 +105,6 @@ export default function useROS() {
     map,
     robotPos,
     moveRobot,
+    battery,
   };
 }

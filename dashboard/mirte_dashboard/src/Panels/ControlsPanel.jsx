@@ -58,6 +58,16 @@ export default function ControlsPanel({
           </button>
 
           <button
+            className="controlButton stop"
+            onClick={() =>
+              moveRobot(0, 0)
+            }
+          >
+            ■
+          </button>
+
+
+          <button
             className="controlButton"
             {...holdEvents(
               0, -ANGULAR_SPEED
