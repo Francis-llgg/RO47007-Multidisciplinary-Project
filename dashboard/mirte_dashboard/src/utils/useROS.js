@@ -16,8 +16,9 @@ export default function useROS() {
   const cmdVelTopic = useRef(null);
 
   useEffect(() => {
+    const rosUrl = import.meta.env.VITE_ROS_URL;
     const ros = new ROSLIB.Ros({
-      url: 'ws://192.168.43.204:9090',
+      url: rosUrl,
     });
 
     ros.on('connection', () => {
@@ -38,7 +39,6 @@ export default function useROS() {
     });
 
     batteryTopic.subscribe((msg) => {
-      console.log("battery update:", msg.percentage);
       setBattery({
         percentage: msg.percentage * 100
       });
@@ -85,7 +85,6 @@ export default function useROS() {
   function moveRobot(linearX, angularZ) {
     if (!cmdVelTopic.current) return;
 
-    console.log("Publishing cmd vel", linearX, angularZ, cmdVelTopic.current);
     cmdVelTopic.current.publish({
       linear: {
         x: linearX,

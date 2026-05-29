@@ -21,7 +21,7 @@ def generate_launch_description():
         ],
         output="screen",
         additional_env={
-            "URL": 'ws://192.168.43.204:9090'
+            "VITE_ROS_URL": 'ws://192.168.43.204:9090'
         }
     )
 
