@@ -37,6 +37,11 @@ setup(
         'console_scripts': [
             'yolo_flower_detector = flower_detector.yolo_flower_detector:main',
             'combined_visualizer = flower_detector.combined_visualizer:main',
+	    'compressed_image_republisher = flower_detector.compressed_image_republisher:main',
+	    'greenhouse_tag_reader = flower_detector.greenhouse_tag_reader:main',
+	    'perception_snapshot_saver = flower_detector.perception_snapshot_saver:main',
+	    'keyboard_snapshot_client = flower_detector.keyboard_snapshot_client:main',
+	    'flower_length_estimator = flower_detector.flower_length_estimator:main',
         ],
     },
 )

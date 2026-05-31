@@ -13,7 +13,9 @@
   <depend>cv_bridge</depend>
   <depend>apriltag_msgs</depend>
   <depend>apriltag_detector</depend>
-
+  <depend>lupin_greenhouse_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
