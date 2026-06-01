@@ -1,4 +1,5 @@
 from setuptools import setup
+from glob import glob
 
 package_name = 'mission_planner'
 
@@ -12,7 +13,7 @@ setup(
     description='Mission Planner for greenhouse robot',
     entry_points={
         'console_scripts': [
-            'mission_planner = mission_planner.Mission_Planner_node:main',
+            'mission_planner_node = mission_planner.mission_planner_node:main',
             'scan_action_server = mission_planner.scan_action_server:main',
         ],
     },
@@ -20,6 +21,8 @@ setup(
     ('share/ament_index/resource_index/packages',
         ['resource/' + package_name]),
     ('share/' + package_name, ['package.xml']),
+	('share/' + package_name + '/launch', glob('launch/*.launch.py')),
+    ('share/' + package_name + '/config', glob('config/*.yaml')),
 ],
 )
 

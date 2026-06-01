@@ -7,7 +7,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import cv2
 
-from mission_planner.action import scan
+from mdp_interfaces.action import Scan
 
 
 class ScanActionServer(Node):
@@ -16,7 +16,7 @@ class ScanActionServer(Node):
         super().__init__('scan_action_server')
         self._action_server = ActionServer(
             self,
-            scan,
+            Scan,
             'scan',
             self.execute_callback)
         

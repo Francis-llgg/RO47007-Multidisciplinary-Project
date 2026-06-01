@@ -16,7 +16,7 @@ def generate_launch_description():
 
         Node(
             package='mission_planner',
-            executable='Mission_Planner_node',
+            executable='mission_planner_node',
             name='mission_planner',
             output='screen'
         ),

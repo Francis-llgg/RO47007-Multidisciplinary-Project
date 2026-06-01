@@ -3,23 +3,21 @@ import rclpy
 from rclpy.action import ActionClient
 from rclpy.node import Node
 
-from mission_planner.action import Scan
+from mdp_interfaces.action import Scan
 
 class ScanClient(Node):
 
-    def __init__(self):
-
-        super().__init__('scan_client')
-
+    def __init__(self, node):
+        self.__node = node
         self._action_client = ActionClient(
-            self,
+            node,
             Scan,
             'scan'
         )
 
     def perform_scan(self, table_id, row_id, pose_id):
 
-        self.get_logger().info("Waiting for scan server...")
+        self.__node.get_logger().info("Waiting for scan server...")
 
         self._action_client.wait_for_server()
 
@@ -29,7 +27,7 @@ class ScanClient(Node):
         goal_msg.row_id = row_id
         goal_msg.pose_id = pose_id
 
-        self.get_logger().info(
+        self.__node.get_logger().info(
             f"Sending scan request: "
             f"{table_id} {row_id} {pose_id}"
         )
@@ -38,19 +36,19 @@ class ScanClient(Node):
             goal_msg
         )
 
-        rclpy.spin_until_future_complete(self, future)
+        rclpy.spin_until_future_complete(self.__node, future)
 
         goal_handle = future.result()
 
         if not goal_handle.accepted:
 
-            self.get_logger().error(
+            self.__node.get_logger().error(
                 "Scan goal rejected"
             )
 
             return None
 
-        self.get_logger().info(
+        self.__node.get_logger().info(
             "Scan goal accepted"
         )
 
@@ -58,7 +56,7 @@ class ScanClient(Node):
         result_future = goal_handle.get_result_async()
 
         rclpy.spin_until_future_complete(
-            self,
+            self.__node,
             result_future
         )
 
