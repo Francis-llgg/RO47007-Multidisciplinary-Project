@@ -13,6 +13,7 @@ setup(
 		('share/' + package_name + '/launch', ['launch/mirte_launch.py']),
         ('share/' + package_name + '/config', ['config/nav2_params.yaml']),
         ('share/' + package_name + '/maps', ['maps/map.yaml', 'maps/map.pgm']),
+		('share/' + package_name + '/worlds', ['../greenhouse_simulation/worlds/greenhouse.world']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
