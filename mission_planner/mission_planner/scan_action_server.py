@@ -35,12 +35,12 @@ class ScanActionServer(Node):
         if 1==1:
             self.get_logger().info('Received scan request, but scan server is currently disabled for testing.')
             goal_handle.abort()
-            result = scan.Result()
+            result = Scan.Result()
             result.success = False
             return result
         
         self.get_logger().info('Starting scan')
-        feedback_msg = scan.Feedback()
+        feedback_msg = Scan.Feedback()
         goal = goal_handle.request
         self.get_logger().info(f"Received scan request for table {goal.table_id} row {goal.row_id} at pose {goal.pose}")
         
@@ -53,7 +53,7 @@ class ScanActionServer(Node):
             
             goal_handle.abort()
 
-            result = scan.Result()
+            result = Scan.Result()
             result.success = False
             feedback_msg.current_status = "Failed: No image received"
             goal_handle.publish_feedback(feedback_msg)
@@ -70,7 +70,7 @@ class ScanActionServer(Node):
         goal_handle.publish_feedback(feedback_msg)
 
         goal_handle.succeed()
-        result = scan.Result()
+        result = Scan.Result()
         result.success = True
         result.image_path = filepath
         return result
