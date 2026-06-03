@@ -15,6 +15,9 @@ class NavigationClient:
         self._client.wait_for_server()
         self._node.get_logger().info("Nav2 action server ready.")
 
+        self.timer =  self._node.create_timer(2.0, self.log_feedback)
+        self.latest_feedback = None
+
     def navigate_to(self, pose):
         """
         pose = (x, y, yaw)
@@ -61,7 +64,14 @@ class NavigationClient:
         return True
 
     def _feedback_cb(self, feedback_msg):
-        feedback = feedback_msg.feedback
+        self.latest_feedback = feedback_msg.feedback
+
+    def log_feedback(self):
+        if self.latest_feedback == None:
+            return
+        
         self._node.get_logger().info(
-            f"Distance remaining: {feedback.distance_remaining:.2f}"
+            f"Distance remaining: {self.latest_feedback.distance_remaining:.2f}"
         )
+        
+    

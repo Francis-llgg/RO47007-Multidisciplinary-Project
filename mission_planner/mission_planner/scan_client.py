@@ -23,9 +23,9 @@ class ScanClient(Node):
 
         goal_msg = Scan.Goal()
 
-        goal_msg.table_id = table_id
-        goal_msg.row_id = row_id
-        goal_msg.pose_id = pose_id
+        goal_msg.table_id = str(table_id)
+        goal_msg.row_id = str(row_id)
+        goal_msg.pose_id = str(pose_id)
 
         self.__node.get_logger().info(
             f"Sending scan request: "

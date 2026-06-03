@@ -19,7 +19,7 @@ class MissionPlannerNode(Node):
         self.pending_rows = self.db.get_pending_rows()
         self.get_logger().info(f"Pending tasks: {pprint(self.pending_rows)}")
         for row in self.pending_rows:
-            self.get_logger().info(f"Executing task for table {row['table_id']} row {row['row']} with scan points: {row['scan_points']}")
+            self.get_logger().info(f"Executing task for table {row['table_id']} row {row['row_id']} with scan points: {row['scan_points']}")
             self.db.execute_row(
                 row, 
                 navigation_client=self.nav_client, 
