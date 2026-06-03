@@ -1,4 +1,5 @@
 from setuptools import find_packages, setup
+from glob import glob
 
 package_name = 'mirte_launch'
 
@@ -10,10 +11,10 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-		('share/' + package_name + '/launch', ['launch/mirte_launch.py']),
+		('share/' + package_name + '/launch', glob('launch/*.py')),
         ('share/' + package_name + '/config', ['config/nav2_params.yaml']),
         ('share/' + package_name + '/maps', ['maps/map.yaml', 'maps/map.pgm']),
-		('share/' + package_name + '/worlds', ['../greenhouse_simulation/worlds/greenhouse.world']),
+		('share/' + package_name + '/worlds', glob('worlds/*.world')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

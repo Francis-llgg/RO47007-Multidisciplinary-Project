@@ -1,10 +1,10 @@
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, GroupAction
+from launch.actions import IncludeLaunchDescription, GroupAction, DeclareLaunchArgument, LogInfo
 from launch_ros.actions import SetRemap, Node
 from launch_ros.substitutions import FindPackageShare
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
-from launch.substitutions import PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 	
 from ament_index_python.packages import get_package_share_directory
 import os
@@ -35,6 +35,7 @@ rviz_config = os.path.join(
 
 use_sim_time = "true"
 autostart = "true"
+
 #Simulation launch (Gazebo)
 simulation_launch = IncludeLaunchDescription(
 	XMLLaunchDescriptionSource(
@@ -61,7 +62,7 @@ rviz_launch = Node(
 navigation_launch = GroupAction(
         actions=[
             SetRemap(src='/cmd_vel', dst='/mirte_base_controller/cmd_vel_unstamped'),
-            SetRemap(src='cmd_vel', dst='/mirte_base_controller/cmd_vel_unstamped'),
+            SetRemap(src='cmd_vel', dst='mirte_base_controller/cmd_vel_unstamped'),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(PathJoinSubstitution([
                     FindPackageShare("nav2_bringup"), "launch", "bringup_launch.py"
@@ -82,5 +83,5 @@ def generate_launch_description():
     return LaunchDescription([ 
         simulation_launch,
 		navigation_launch,
-        rviz_launch
+        rviz_launch,
 	])
