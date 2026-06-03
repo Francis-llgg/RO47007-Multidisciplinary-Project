@@ -483,4 +483,14 @@ ros2 launch mirte_launch mirte.launch.py
 ```
 </details>
 
+<details>
+<summary>Launching the MissionPlanner</summary>
+This package will make the robot go through every pose in the file: 'mission_planner/config/tables.yaml'. When at a pose it will capture the latest recieved image and save it to '~/scan_images'.
+
+Launching the package can be done through:
+```bash
+ros2 launch mission_planner mission_planner.launch.py
+```
+</details>
+
 
