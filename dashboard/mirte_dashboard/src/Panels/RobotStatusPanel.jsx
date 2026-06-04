@@ -1,10 +1,15 @@
+import { useState } from "react";
 import Panel from './Panel';
 
 export default function RobotStatusPanel({
   connected,
   robotPos,
-  battery
+  battery,
 }) {
+  const [r, setR] = useState(0);
+  const [g, setG] = useState(0);
+  const [b, setB] = useState(0);
+
   return (
     <Panel title="Robot Status">
       <div className="statusRow">
@@ -13,23 +18,6 @@ export default function RobotStatusPanel({
           {connected
             ? '🟢 Connected'
             : '🔴 Offline'}
-        </span>
-      </div>
-
-      <div className="statusRow">
-        <span>X</span>
-        <span>{robotPos.x.toFixed(2)}</span>
-      </div>
-
-      <div className="statusRow">
-        <span>Y</span>
-        <span>{robotPos.y.toFixed(2)}</span>
-      </div>
-
-      <div className="statusRow">
-        <span>Yaw</span>
-        <span>
-          {((robotPos.yaw * 180) / Math.PI).toFixed(1)}°
         </span>
       </div>
 
