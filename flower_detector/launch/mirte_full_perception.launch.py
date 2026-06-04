@@ -344,7 +344,7 @@ def generate_launch_description():
                 'tag_topic': '/gripper_camera/tags',
                 'measurements_topic': '/flower_detector/flower_lengths',
                 'cm_per_pixel': 0.0,
-                'tag_size_cm': 5.0,
+                'tag_size_cm': 4.0,
             }],
         ),
     ])
