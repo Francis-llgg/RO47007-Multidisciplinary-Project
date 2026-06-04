@@ -159,15 +159,25 @@ npm install
 
 ### Running the Dashboard
 
-1. Start the MIRTE simulation in Gazebo
-2. In a seperate terminal: Start rosbridge
+Build and source the packages:
 ```bash
-ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+cd ~/ros2_ws
+colcon build --symlink-install
+source install/setup.bash
+source /opt/ros/humble/setup.bash
 ```
-3. In a seperate terminal: Start the React dashboard
+
+If running the dashboard with the Gazebo simulation:
+1. Start the Gazebo simulation
+2. Launch the dashboard using the launch file:
 ```bash
-cd mirte_dashboard
-npm run dev -- --host
+ros2 launch dashboard simulation.launch.py
+```
+
+If running the dashboard with the robot:
+1. Launch the dashboard using the launch file:
+```bash
+ros2 launch dashboard robot.launch.py
 ```
 
 ### Opening the Dashboard
