@@ -29,3 +29,8 @@ install(
   DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )
+
+install(
+  DIRECTORY mirte_dashboard
+  DESTINATION share/${PROJECT_NAME}/mirte_dashboard
+)

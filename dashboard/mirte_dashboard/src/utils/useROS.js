@@ -68,9 +68,10 @@ export default function useROS() {
       });
     });
 
+    const cmdVelName = import.meta.env.VITE_CMD_TOPIC;
     cmdVelTopic.current = new ROSLIB.Topic({
       ros,
-      name: '/mirte_base_controller/cmd_vel',
+      name: cmdVelName,
       messageType: 'geometry_msgs/Twist',
     });
 
@@ -107,3 +108,4 @@ export default function useROS() {
     battery,
   };
 }
+
