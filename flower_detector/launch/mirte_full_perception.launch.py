@@ -280,11 +280,11 @@ def generate_launch_description():
             name='combined_visualizer',
             output='screen',
             parameters=[{
-                'image_topic': '/flower_detector/image_annotated',
+                'image_topic': '/gripper_camera/image_raw/compressed',#/flower_detector/image_annotated
                 'flower_topic': '/flower_detector/detections',
                 'tag_topic': '/gripper_camera/tags',
                 'output_topic': '/perception/image_combined',
-                'use_compressed': False,
+                'use_compressed': True, #False
             }],
         ),
 
@@ -322,6 +322,7 @@ def generate_launch_description():
             parameters=[{
                 'image_topic': '/perception/image_combined',
                 'lengths_topic': '/flower_detector/flower_lengths',
+                'tag_reading_topic': '/greenhouse/tag_reading',
                 'snapshot_dir': '/home/nikolaos/ros2_ws/perception_snapshots',
             }],
         ),
