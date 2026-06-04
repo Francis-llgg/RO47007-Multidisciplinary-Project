@@ -12,7 +12,8 @@ This repository contains the ROS 2 software, simulation setup, mapping/localizat
 - `mdp_localization/`: localization configuration.
 - `flower_detector/`: YOLO flower/bug detection, AprilTag integration, and combined perception visualization.
 
-## Set up Virtual Greenhouse Environment
+<details> 
+<summary>Set up Virtual Greenhouse Environment</summary>
 
 This project uses `mdp-greenhouse` to define the virtual greenhouse layout. The layout is stored in `greenhouse_setup/`, then converted into a Gazebo world file using a Python script.
 
@@ -104,8 +105,10 @@ Generate worlds/greenhouse.world
         ↓
 Launch MIRTE with the generated Gazebo world
 ```
+</details>
 
-## Set up MIRTE Dashboard
+<details>
+<summary>Set up MIRTE Dashboard</summary>
 
 A React-based dashboard for monitoring and controlling the MIRTE robot in a ROS2 + Gazebo simulation.
 
@@ -167,15 +170,25 @@ npm install
 
 ### Running the Dashboard
 
-1. Start the MIRTE simulation in Gazebo
-2. In a seperate terminal: Start rosbridge
+Build and source the packages:
 ```bash
-ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+cd ~/ros2_ws
+colcon build --symlink-install
+source install/setup.bash
+source /opt/ros/humble/setup.bash
 ```
-3. In a seperate terminal: Start the React dashboard
+
+If running the dashboard with the Gazebo simulation:
+1. Start the Gazebo simulation
+2. Launch the dashboard using the launch file:
 ```bash
-cd mirte_dashboard
-npm run dev -- --host
+ros2 launch dashboard simulation.launch.py
+```
+
+If running the dashboard with the robot:
+1. Launch the dashboard using the launch file:
+```bash
+ros2 launch dashboard robot.launch.py
 ```
 
 ### Opening the Dashboard
@@ -186,261 +199,9 @@ http://localhost:5173
 ```
 
 ---
-
-## Flower and AprilTag Combined Perception Pipeline
-
-The `flower_detector` package runs the greenhouse perception pipeline. It combines:
-
-- YOLO-based detection for flowers and bugs,
-- AprilTag detection for greenhouse/station references,
-- a combined visualizer that overlays all detections on a single image topic.
-
-The final visualization is published on:
-
-```text
-/perception/image_combined
-```
-
-### Package contents
-
-```text
-flower_detector/
-├── flower_detector/
-│   ├── yolo_flower_detector.py
-│   └── combined_visualizer.py
-├── launch/
-│   ├── laptop_combined_perception.launch.py
-│   └── mirte_combined_perception.launch.py
-├── models/
-│   └── best.pt
-├── package.xml
-└── setup.py
-```
-
-### Perception topic structure
-
-For laptop-camera testing:
-
-```text
-/camera/image_raw
-    ├── AprilTag detector       → /camera/tags
-    ├── YOLO flower detector    → /flower_detector/detections
-    └── Combined visualizer     → /perception/image_combined
-```
-
-For MIRTE operation:
-
-```text
-/gripper_camera/image_raw
-    ├── AprilTag detector       → /gripper_camera/tags
-    ├── YOLO flower detector    → /flower_detector/detections
-    └── Combined visualizer     → /perception/image_combined
-```
-
-### Install perception dependencies
-
-Install the required ROS 2 packages:
-
-```bash
-sudo apt update
-
-sudo apt install python3-pip \
-                 ros-humble-cv-bridge \
-                 ros-humble-vision-msgs \
-                 ros-humble-rqt-image-view \
-                 ros-humble-v4l2-camera \
-                 ros-humble-apriltag-detector \
-                 ros-humble-apriltag-draw \
-                 ros-humble-apriltag-detector-umich \
-                 ros-humble-apriltag-detector-mit
-```
-
-Install the Python dependencies:
-
-```bash
-pip install ultralytics opencv-python
-```
-
-If `cv_bridge` crashes with a NumPy-related error, use:
-
-```bash
-pip install --user --force-reinstall "numpy==1.26.4"
-```
-
-### Build the perception package
-
-From the workspace root:
-
-```bash
-cd ~/ros2_ws
-source /opt/ros/humble/setup.bash
-colcon build --symlink-install --packages-select flower_detector
-source install/setup.bash
-```
-
-Check that the launch files are available:
-
-```bash
-ros2 launch flower_detector laptop_combined_perception.launch.py --show-args
-ros2 launch flower_detector mirte_combined_perception.launch.py --show-args
-```
-
-Check that the YOLO model is installed with the package:
-
-```bash
-ls ~/ros2_ws/install/flower_detector/share/flower_detector/models/best.pt
-```
-
-### Run perception with the laptop camera
-
-Use this mode for testing without MIRTE:
-
-```bash
-source /opt/ros/humble/setup.bash
-source ~/ros2_ws/install/setup.bash
-ros2 launch flower_detector laptop_combined_perception.launch.py
-```
-
-To view the combined output:
-
-```bash
-source /opt/ros/humble/setup.bash
-ros2 run rqt_image_view rqt_image_view
-```
-
-Select:
-
-```text
-/perception/image_combined
-```
-
-Optional confidence override:
-
-```bash
-ros2 launch flower_detector laptop_combined_perception.launch.py confidence:=0.60
-```
-
-### Run perception with MIRTE
-
-First start the MIRTE gripper camera. The perception pipeline expects this topic:
-
-```text
-/gripper_camera/image_raw
-```
-
-On MIRTE:
-
-```bash
-source /opt/ros/humble/setup.bash
-export ROS_DOMAIN_ID=0
-
-# Start the MIRTE gripper camera node/launch here.
-```
-
-Check on MIRTE:
-
-```bash
-ros2 topic list | grep image
-ros2 topic hz /gripper_camera/image_raw
-```
-
-On the laptop, check that the MIRTE camera topic is visible:
-
-```bash
-source /opt/ros/humble/setup.bash
-source ~/ros2_ws/install/setup.bash
-export ROS_DOMAIN_ID=0
-
-ros2 daemon stop
-ros2 daemon start
-
-ros2 topic list | grep image
-ros2 topic hz /gripper_camera/image_raw
-```
-
-Then launch the full MIRTE perception pipeline on the laptop:
-
-```bash
-source /opt/ros/humble/setup.bash
-source ~/ros2_ws/install/setup.bash
-export ROS_DOMAIN_ID=0
-
-ros2 launch flower_detector mirte_combined_perception.launch.py
-```
-
-To view the combined output:
-
-```bash
-source /opt/ros/humble/setup.bash
-export ROS_DOMAIN_ID=0
-ros2 run rqt_image_view rqt_image_view
-```
-
-Select:
-
-```text
-/perception/image_combined
-```
-
-### Useful perception checks
-
-List relevant perception topics:
-
-```bash
-ros2 topic list | grep -E "camera|gripper|flower|tag|perception"
-```
-
-Check AprilTag detections with the laptop camera:
-
-```bash
-ros2 topic echo /camera/tags
-```
-
-Check AprilTag detections with the MIRTE gripper camera:
-
-```bash
-ros2 topic echo /gripper_camera/tags
-```
-
-Check YOLO detections:
-
-```bash
-ros2 topic echo /flower_detector/detections
-```
-
-Check combined image rate:
-
-```bash
-ros2 topic hz /perception/image_combined
-```
-
-### Detection colors
-
-The combined visualizer uses the following overlay colors:
-
-```text
-tulip_red    → blue
-tulip_white  → cyan
-tulip_pink   → light gray
-bug          → cyan
-AprilTags    → red
-```
-
-### Notes
-
-The AprilTag detector itself is not implemented in this repository. It is used as an external ROS 2 dependency through `ros-humble-apriltag-detector`.
-
-The YOLO weights are included in:
-
-```text
-flower_detector/models/best.pt
-```
-
-Both launch files use a package-relative model path, so the pipeline does not depend on a user-specific local training path.
-
----
-
-## Mapping and Saving Greenhouse Map
+</details>
+<details>
+<summary>Mapping and Saving Greenhouse Map</summary>
 
 ### 1. Build and source the workspace
 
@@ -621,8 +382,10 @@ If the filtered map is used for navigation or AMCL localization, use the `.yaml`
 ```
 
 ---
+</details>
 
-## Localization in Greenhouse Map
+<details>
+<summary>Localization in Greenhouse Map</summary>
 
 ### 1. Build and source the workspace
 
@@ -720,46 +483,36 @@ Call /save_map
 Load saved map with nav2_map_server
 ```
 
----
+</details>
 
-## General development workflow
+<details>
+<Summary>Launching Mirte with navigation, Rviz (and simulation)</summary>
+To use this, you first have to build and install the mirte_launch package in your ros2 workspace.
 
-After pulling new code or changing packages, rebuild and source the workspace:
-
-```bash
-cd ~/ros2_ws
-source /opt/ros/humble/setup.bash
-colcon build --symlink-install
-source install/setup.bash
-```
-
-Every new terminal should source ROS 2 and the workspace before running package commands:
+To launch the MIRTE robot with navigation in the simulation and Rviz, use the following command:
 
 ```bash
-source /opt/ros/humble/setup.bash
-source ~/ros2_ws/install/setup.bash
+ros2 launch mirte_launch mirte_sim.launch.py
 ```
+This command will start the MIRTE robot in the Gazebo simulation environment, along with the nav2 stack with correct paramters found in mirte_launch/config/nav2_params and visualization in Rviz.
 
-## Contributing
+The parameters for the navigation stack are configured in `mirte_launch/config/nav2_params`. You can modify these parameters to adjust the behavior of the navigation stack as needed.
 
-Development should be done on feature branches. Create a branch from `main`, commit changes there, push the branch to GitLab, and open a merge request when the feature is ready for review.
-
-Example:
-
+If launching the mirte in real life, use: 
 ```bash
-git checkout main
-git pull origin main
-git checkout -b feature/<feature_name>
-# make changes
-git add <changed_files>
-git commit -m "Describe the change"
-git push -u origin feature/<feature_name>
+ros2 launch mirte_launch mirte.launch.py
 ```
+</details>
 
-## Support
+<details>
+<summary>Launching the MissionPlanner</summary>
+This package will make the robot go through every pose in the file: 'mission_planner/config/tables.yaml'. When at a pose it will capture the latest recieved image and save it to '~/scan_images'.
 
-For project-specific questions, contact the Group 01 team members or use the project communication channel agreed by the team. For general ROS issues, include the command used, the full terminal output, and the relevant topic/node names when asking for help.
+Launching the package can be done through:
+```bash
+ros2 launch mission_planner mission_planner.launch.py
+```
+</details>
 
-## Project status
 
 This repository is under active development during the RO47007 Multidisciplinary Project.
