@@ -32,6 +32,138 @@ Main outputs:
 
 ---
 
+## Required dependencies
+
+This package uses local nodes from `flower_detector`, plus external ROS 2 packages.
+
+Required ROS 2 packages:
+
+```text
+apriltag_detector
+apriltag_msgs
+image_transport
+vision_msgs
+sensor_msgs
+std_msgs
+std_srvs
+cv_bridge
+lupin_greenhouse_bridge
+lupin_greenhouse_msgs
+```
+
+---
+
+## AprilTag detector dependency
+
+The AprilTag detector is **not stored inside this `flower_detector` package**.
+
+It comes from:
+
+```text
+https://github.com/ros-misc-utilities/apriltag_detector/tree/master/apriltag_detector
+```
+
+The full perception launch uses:
+
+```text
+apriltag_detector/launch/detect.launch.py
+```
+
+and publishes detected tags on:
+
+```text
+/gripper_camera/tags
+```
+
+Check if the AprilTag packages are available:
+
+```bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 pkg prefix apriltag_detector
+ros2 pkg prefix apriltag_msgs
+```
+
+If both commands print paths, the packages are available.
+
+If missing, clone and build the detector package:
+
+```bash
+cd ~/ros2_ws/src
+git clone https://github.com/ros-misc-utilities/apriltag_detector.git
+
+cd ~/ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install
+source install/setup.bash
+```
+
+Then verify again:
+
+```bash
+ros2 pkg prefix apriltag_detector
+ros2 pkg prefix apriltag_msgs
+```
+
+---
+
+## Greenhouse bridge dependency
+
+The greenhouse bridge packages are also external to `flower_detector`.
+
+They are provided by the separate group repository:
+
+```text
+https://gitlab.tudelft.nl/cor/ro47007/2026/group_14/lupin_greenhouse_ros.git
+```
+
+This repository provides:
+
+```text
+lupin_greenhouse_bridge
+lupin_greenhouse_msgs
+```
+
+Clone and build it with:
+
+```bash
+cd ~/ros2_ws
+git clone https://gitlab.tudelft.nl/cor/ro47007/2026/group_14/lupin_greenhouse_ros.git
+
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install
+source install/setup.bash
+```
+
+Verify:
+
+```bash
+ros2 pkg prefix lupin_greenhouse_bridge
+ros2 pkg prefix lupin_greenhouse_msgs
+```
+
+---
+
+## Final dependency check
+
+Run:
+
+```bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 pkg prefix apriltag_detector
+ros2 pkg prefix apriltag_msgs
+ros2 pkg prefix lupin_greenhouse_bridge
+ros2 pkg prefix lupin_greenhouse_msgs
+ros2 pkg prefix image_transport
+```
+
+If all commands print paths, the perception pipeline dependencies are available.
+
+---
+
 ## Build after code changes
 
 Run on the laptop:
@@ -80,7 +212,11 @@ Expected:
 around 30 Hz
 ```
 
-Stop the rate check with `Ctrl+C`.
+Stop the rate check with:
+
+```text
+Ctrl+C
+```
 
 ---
 
@@ -106,7 +242,11 @@ Expected compressed rate:
 15–30 Hz
 ```
 
-Stop with `Ctrl+C`.
+Stop with:
+
+```text
+Ctrl+C
+```
 
 ---
 
@@ -168,13 +308,13 @@ q
 
 to quit.
 
-Saved files:
+Saved files are stored in:
 
 ```text
 ~/ros2_ws/perception_snapshots/
 ```
 
-Each snapshot creates:
+Each snapshot creates a matched pair:
 
 ```text
 perception_snapshot_YYYYMMDD_HHMMSS.png
@@ -310,7 +450,11 @@ Current tag size parameter:
 'tag_size_cm': 5.0
 ```
 
-This assumes the printed AprilTag square is about `5 cm × 5 cm`.
+This assumes the printed AprilTag square is about:
+
+```text
+5 cm × 5 cm
+```
 
 For best accuracy, place the AprilTag and flower at roughly the same distance from the camera.
 
