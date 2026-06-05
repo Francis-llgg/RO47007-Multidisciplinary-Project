@@ -13,7 +13,9 @@ export default function useROS() {
   const [battery, setBattery] = useState({
     percentage: 0,
   })
+  const [cameraImage, setCameraImage] = useState(null);
   const cmdVelTopic = useRef(null);
+  const armTopic = useRef(null);
 
   useEffect(() => {
     const rosUrl = import.meta.env.VITE_ROS_URL;
@@ -75,16 +77,36 @@ export default function useROS() {
       messageType: 'geometry_msgs/Twist',
     });
 
+    const cameraTopic = new ROSLIB.Topic({
+      ros,
+      name: '/gripper_camera/image_raw/compressed',
+      messageType: 'sensor_msgs/CompressedImage',
+    });
+
+    cameraTopic.subscribe((msg) => {
+      setCameraImage(
+        `data:image/jpeg;base64,${msg.data}`
+      );
+    });
+
+    armTopic.current = new ROSLIB.Topic({
+      ros,
+      name: "/mirte_master_arm_controller/joint_trajectory",
+      messageType: "trajectory_msgs/JointTrajectory",
+    });
+
     return () => {
       batteryTopic.unsubscribe();
       mapTopic.unsubscribe();
       odomTopic.unsubscribe();
+      cameraTopic.unsubscribe();
       ros.close();
     };
   }, []);
 
   function moveRobot(linearX, angularZ) {
-    if (!cmdVelTopic.current) return;
+    console.log("moveRobot CALLED", linearX, angularZ);
+    if (!cmdVelTopic.current) {console.log("CMD VEL NOT READY"); return;}
 
     cmdVelTopic.current.publish({
       linear: {
@@ -100,12 +122,38 @@ export default function useROS() {
     });
   }
 
+  function sendArmPose(positions) {
+    if (!armTopic.current) return;
+
+    const msg = {
+      joint_names: [
+        "shoulder_pan_joint",
+        "shoulder_lift_joint",
+        "elbow_joint",
+        "wrist_joint",
+      ],
+      points: [
+        {
+          positions: positions,
+          time_from_start: {
+            sec: 3,
+            nanosec: 0,
+          },
+        },
+      ],
+    };
+
+    armTopic.current.publish(msg);
+  }
+
   return {
     connected,
     map,
     robotPos,
     moveRobot,
     battery,
+    cameraImage,
+    sendArmPose,
   };
 }
 

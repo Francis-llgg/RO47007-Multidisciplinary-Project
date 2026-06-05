@@ -6,6 +6,7 @@ const ANGULAR_SPEED = 0.7;
 
 export default function ControlsPanel({
   moveRobot,
+  sendArmPose,
 }) {
   const startMove = (linear, angular) => {
     // avoid multiple intervals stacking
@@ -84,6 +85,28 @@ export default function ControlsPanel({
           )}
         >
           ↓
+        </button>
+      </div>
+
+      <div className="armControls">
+        <h4>Arm Presets</h4>
+
+        <button
+          className="controlButton"
+          onClick={() =>
+            sendArmPose([0, 0, 0, -1])
+          }
+        >
+          Up
+        </button>
+
+        <button
+          className="controlButton"
+          onClick={() =>
+            sendArmPose([0, 0, -1.5, 0])
+          }
+        >
+          Low
         </button>
       </div>
     </Panel>

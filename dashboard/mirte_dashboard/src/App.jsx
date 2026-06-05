@@ -6,9 +6,10 @@ import MapPanel from './Panels/MapPanel.jsx';
 import ControlsPanel from './Panels/ControlsPanel.jsx';
 import RobotStatusPanel from './Panels/RobotStatusPanel.jsx';
 import ClickedPointPanel from './Panels/ClickedPointPanel.jsx';
+import CameraPanel from './Panels/CameraPanel.jsx';
 
 export default function App() {
-  const {connected, map, robotPos, moveRobot, battery, } = useROS();
+  const {connected, map, robotPos, moveRobot, battery, cameraImage, sendArmPose} = useROS();
 
   const [clickedPoint, setClickedPoint] = useState(null);
 
@@ -33,8 +34,13 @@ export default function App() {
             clickedPoint={clickedPoint}
           />
 
+          <CameraPanel
+            cameraImage={cameraImage}
+          />
+
           <ControlsPanel
             moveRobot={moveRobot}
+            sendArmPose={sendArmPose}
           />
         </div>
       </div>
