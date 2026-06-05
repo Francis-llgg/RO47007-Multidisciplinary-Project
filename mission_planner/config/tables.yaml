@@ -1,0 +1,46 @@
+tables:
+  - table_id: T1 #Table number
+    status: pending
+    rows:
+      - row_id: A #A or B
+        status: pending
+        scan_points:
+          - name: pose_1
+            pose: [3.2, 2.75, 1.07] #[x, y, yaw]
+          - name: pose_2
+            pose: [2.5, 2.75, 1.07]
+          - name: pose_3
+            pose: [1.5, 2.75, 1.07]
+
+      - row_id: B
+        status: pending
+        scan_points:
+          - name: pose_1
+            pose: [1.84, 2.75, 0.0]
+          - name: pose_2
+            pose: [4.14, 3.67, 0.0]
+          - name: pose_3
+            pose: [3.30, 7.08, 0.0]
+
+  # - table_id: T2
+  #   status: pending
+  #   rows:
+  #     - row_id: A
+  #       status: pending
+  #       scan_points:
+  #         - name: pose_1
+  #           pose: [x7, y7, z7]
+  #         - name: pose_2
+  #           pose: [x8, y8, z8]
+  #         - name: pose_3
+  #           pose: [x9, y9, z9]
+
+  #     - row_id: B
+  #       status: pending
+  #       scan_points:
+  #         - name: pose_1
+  #           pose: [x10, y10, z10]
+  #         - name: pose_2
+  #           pose: [x11, y11, z11]
+  #         - name: pose_3
+  #           pose: [x12, y12, z12]
