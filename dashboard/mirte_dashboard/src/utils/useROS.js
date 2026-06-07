@@ -16,6 +16,7 @@ export default function useROS() {
   const [cameraImage, setCameraImage] = useState(null);
   const cmdVelTopic = useRef(null);
   const armTopic = useRef(null);
+  const initialPoseTopic = useRef(null);
 
   useEffect(() => {
     const rosUrl = import.meta.env.VITE_ROS_URL;
@@ -95,6 +96,12 @@ export default function useROS() {
       messageType: "trajectory_msgs/JointTrajectory",
     });
 
+    initialPoseTopic.current = new ROSLIB.Topic({
+      ros,
+      name: "/initialpose",
+      messageType: "geometry_msgs/PoseWithCovarianceStamped",
+    });
+
     return () => {
       batteryTopic.unsubscribe();
       mapTopic.unsubscribe();
@@ -146,6 +153,42 @@ export default function useROS() {
     armTopic.current.publish(msg);
   }
 
+  function setInitialPose(x, y, yaw) {
+    if (!initialPoseTopic.current) return;
+
+    const qz = Math.sin(yaw / 2);
+    const qw = Math.cos(yaw / 2);
+
+    initialPoseTopic.current.publish({
+      header: {
+        frame_id: "map",
+      },
+      pose: {
+        pose: {
+          position: {
+            x,
+            y,
+            z: 0,
+          },
+          orientation: {
+            x: 0,
+            y: 0,
+            z: qz,
+            w: qw,
+          },
+        },
+        covariance: [
+          0.25,0,0,0,0,0,
+          0,0.25,0,0,0,0,
+          0,0,0,0,0,0,
+          0,0,0,0,0,0,
+          0,0,0,0,0,0,
+          0,0,0,0,0,0.0685,
+        ],
+      },
+    });
+  }
+
   return {
     connected,
     map,
@@ -154,6 +197,7 @@ export default function useROS() {
     battery,
     cameraImage,
     sendArmPose,
+    setInitialPose,
   };
 }
 

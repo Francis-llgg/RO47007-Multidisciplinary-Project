@@ -9,7 +9,7 @@ import ClickedPointPanel from './Panels/ClickedPointPanel.jsx';
 import CameraPanel from './Panels/CameraPanel.jsx';
 
 export default function App() {
-  const {connected, map, robotPos, moveRobot, battery, cameraImage, sendArmPose} = useROS();
+  const {connected, map, robotPos, moveRobot, battery, cameraImage, sendArmPose, setInitialPose} = useROS();
 
   const [clickedPoint, setClickedPoint] = useState(null);
 
@@ -20,7 +20,8 @@ export default function App() {
           map={map}
           robotPos={robotPos}
           clickedPoint={clickedPoint}
-          onMapClick={setClickedPoint}
+          setClickedPoint={setClickedPoint}
+          setInitialPose={setInitialPose}
         />
 
         <div className="sidebar">
