@@ -6,11 +6,11 @@ tables:
         status: pending
         scan_points:
           - name: pose_1
-            pose: [3.2, 2.75, 1.07] #[x, y, yaw]
+            pose: [0.75, 1.0, 1.07] #[x, y, yaw]
           - name: pose_2
-            pose: [2.5, 2.75, 1.07]
+            pose: [0.75, 1.5, 1.07]
           - name: pose_3
-            pose: [1.5, 2.75, 1.07]
+            pose: [0.75, 2.0, 1.07]
 
       - row_id: B
         status: pending
