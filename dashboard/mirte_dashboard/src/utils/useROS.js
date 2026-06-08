@@ -13,9 +13,12 @@ export default function useROS() {
   const [battery, setBattery] = useState({
     percentage: 0,
   })
+  const [liveCamera, setLiveCamera] = useState(null);
   const [cameraImage, setCameraImage] = useState(null);
+  const [latestObservation, setLatestObservation] = useState(null);
   const cmdVelTopic = useRef(null);
   const armTopic = useRef(null);
+  const initialPoseTopic = useRef(null);
 
   useEffect(() => {
     const rosUrl = import.meta.env.VITE_ROS_URL;
@@ -77,6 +80,28 @@ export default function useROS() {
       messageType: 'geometry_msgs/Twist',
     });
 
+    const latestObservationTopic = new ROSLIB.Topic({
+      ros,
+      name: '/latest_observation',
+      messageType: 'std_msgs/String',
+    });
+
+    latestObservationTopic.subscribe((msg) => {
+      console.log("latest observation received");
+      console.log("RAW MSG:", msg);
+      console.log("DATA:", msg.data);
+
+      const data = JSON.parse(msg.data);
+
+      setLatestObservation(data);
+
+      if (data.image_url) {
+        setCameraImage(data.image_url);
+      } else {
+        setCameraImage(null);
+      }
+    });
+
     const cameraTopic = new ROSLIB.Topic({
       ros,
       name: '/gripper_camera/image_raw/compressed',
@@ -84,7 +109,7 @@ export default function useROS() {
     });
 
     cameraTopic.subscribe((msg) => {
-      setCameraImage(
+      setLiveCamera(
         `data:image/jpeg;base64,${msg.data}`
       );
     });
@@ -95,11 +120,17 @@ export default function useROS() {
       messageType: "trajectory_msgs/JointTrajectory",
     });
 
+    initialPoseTopic.current = new ROSLIB.Topic({
+      ros,
+      name: "/initialpose",
+      messageType: "geometry_msgs/PoseWithCovarianceStamped",
+    });
+
     return () => {
       batteryTopic.unsubscribe();
       mapTopic.unsubscribe();
       odomTopic.unsubscribe();
-      cameraTopic.unsubscribe();
+      latestObservationTopic.unsubscribe();
       ros.close();
     };
   }, []);
@@ -146,6 +177,42 @@ export default function useROS() {
     armTopic.current.publish(msg);
   }
 
+  function setInitialPose(x, y, yaw) {
+    if (!initialPoseTopic.current) return;
+
+    const qz = Math.sin(yaw / 2);
+    const qw = Math.cos(yaw / 2);
+
+    initialPoseTopic.current.publish({
+      header: {
+        frame_id: "map",
+      },
+      pose: {
+        pose: {
+          position: {
+            x,
+            y,
+            z: 0,
+          },
+          orientation: {
+            x: 0,
+            y: 0,
+            z: qz,
+            w: qw,
+          },
+        },
+        covariance: [
+          0.25,0,0,0,0,0,
+          0,0.25,0,0,0,0,
+          0,0,0,0,0,0,
+          0,0,0,0,0,0,
+          0,0,0,0,0,0,
+          0,0,0,0,0,0.0685,
+        ],
+      },
+    });
+  }
+
   return {
     connected,
     map,
@@ -153,7 +220,10 @@ export default function useROS() {
     moveRobot,
     battery,
     cameraImage,
+    latestObservation,
+    liveCamera,
     sendArmPose,
+    setInitialPose,
   };
 }
 

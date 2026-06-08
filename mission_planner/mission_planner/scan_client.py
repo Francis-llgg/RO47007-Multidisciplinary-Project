@@ -4,6 +4,8 @@ from rclpy.action import ActionClient
 from rclpy.node import Node
 
 from mdp_interfaces.action import Scan
+from std_srvs.srv import Trigger
+
 
 class ScanClient(Node):
 
@@ -14,6 +16,33 @@ class ScanClient(Node):
             Scan,
             'scan'
         )
+
+        self.client = self.__node.create_client(
+            Trigger,
+            '/save_perception_snapshot'
+        )
+
+
+    def call_snapshot_service(self):
+        if not self.client.wait_for_service(timeout_sec=1.0):
+            self.__node.get_logger().warn('Service /save_perception_snapshot is not available.')
+            return
+
+        request = Trigger.Request()
+        future = self.client.call_async(request)
+        future.add_done_callback(self.handle_response)
+
+    def handle_response(self, future):
+        try:
+            response = future.result()
+        except Exception as error:
+            self.__node.get_logger().error(f'Snapshot service call failed: {error}')
+            return
+
+        if response.success:
+            self.__node.get_logger().info(f'Snapshot saved: {response.message}')
+        else:
+            self.__node.get_logger().warn(f'Snapshot not saved: {response.message}')
 
     def perform_scan(self, table_id, row_id, pose_id):
 
@@ -31,6 +60,10 @@ class ScanClient(Node):
             f"Sending scan request: "
             f"{table_id} {row_id} {pose_id}"
         )
+
+        #Calling the snapshot service before performing the scan
+        self.__node.get_logger().info("Saving perception snapshot before scan...")
+        self.call_snapshot_service()
 
         future = self._action_client.send_goal_async(
             goal_msg
