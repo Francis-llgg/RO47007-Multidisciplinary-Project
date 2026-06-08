@@ -7,9 +7,10 @@ import ControlsPanel from './Panels/ControlsPanel.jsx';
 import RobotStatusPanel from './Panels/RobotStatusPanel.jsx';
 import ClickedPointPanel from './Panels/ClickedPointPanel.jsx';
 import CameraPanel from './Panels/CameraPanel.jsx';
+import LiveCameraPanel from './Panels/LiveCameraPanel.jsx';
 
 export default function App() {
-  const {connected, map, robotPos, moveRobot, battery, cameraImage, sendArmPose} = useROS();
+  const {connected, map, robotPos, moveRobot, battery, cameraImage, latestObservation, liveCamera, sendArmPose, setInitialPose} = useROS();
 
   const [clickedPoint, setClickedPoint] = useState(null);
 
@@ -20,7 +21,8 @@ export default function App() {
           map={map}
           robotPos={robotPos}
           clickedPoint={clickedPoint}
-          onMapClick={setClickedPoint}
+          setClickedPoint={setClickedPoint}
+          setInitialPose={setInitialPose}
         />
 
         <div className="sidebar">
@@ -30,12 +32,17 @@ export default function App() {
             battery={battery}
           />
 
+          <LiveCameraPanel
+            liveCamera={liveCamera}
+          />
+
           <ClickedPointPanel
             clickedPoint={clickedPoint}
           />
 
           <CameraPanel
             cameraImage={cameraImage}
+            latestObservation={latestObservation}
           />
 
           <ControlsPanel

@@ -1,14 +1,23 @@
 #!/usr/bin/env python3
 
 import json
+from importlib.resources import files
 import yaml
 from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
-CONFIG_PATH = REPO_ROOT / "greenhouse_setup" / "greenhouse_config.yaml"
-TAGS_PATH = REPO_ROOT / "greenhouse_setup" / "tag_locations.json"
+# CONFIG_PATH = REPO_ROOT / "greenhouse_setup" / "greenhouse_config.yaml"
+# TAGS_PATH = REPO_ROOT / "greenhouse_setup" / "tag_locations.json"
+# WORLD_PATH = REPO_ROOT / "worlds" / "greenhouse.world"
+
+
+MDP_CONFIG_DIR = files("greenhouse_sim") / "configs"
+
+CONFIG_PATH = MDP_CONFIG_DIR / "greenhouse_config.yaml"
+TAGS_PATH = MDP_CONFIG_DIR / "tag_locations.json"
+
 WORLD_PATH = REPO_ROOT / "worlds" / "greenhouse.world"
 
 
