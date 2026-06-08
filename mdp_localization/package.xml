@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>mdp_localization</name>
+  <version>0.0.0</version>
+  <description>Localization launch package for MIRTE greenhouse robot.</description>
+  <maintainer email="Z.Zheng-13@student.tudelft.nl">Francis Zheng</maintainer>
+  <license>MIT</license>
+
+  <depend>launch</depend>
+  <depend>launch_ros</depend>
+  <depend>launch_xml</depend>
+  <depend>mdp_mapping</depend>
+  <depend>nav2_bringup</depend>
+  <depend>slam_toolbox</depend>
+  <depend>mirte_gazebo</depend>
+  <depend>rviz2</depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

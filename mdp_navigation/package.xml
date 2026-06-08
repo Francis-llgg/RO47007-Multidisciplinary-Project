@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>mdp_navigation</name>
+  <version>0.0.0</version>
+  <description>Navigation configuration package for MIRTE greenhouse robot.</description>
+  <maintainer email="Z.Zheng-13@student.tudelft.nl">Francis Zheng</maintainer>
+  <license>MIT</license>
+
+  <depend>nav2_bringup</depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
