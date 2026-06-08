@@ -1,3 +1,5 @@
+from glob import glob
+
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, GroupAction, DeclareLaunchArgument, LogInfo
 from launch_ros.actions import SetRemap, Node
@@ -9,11 +11,14 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from ament_index_python.packages import get_package_share_directory
 import os
 
-map_file = os.path.join(
+maps_dir = os.path.join(
     get_package_share_directory("mirte_launch"),
-    "maps",
-    "map.yaml"
+    "maps"
 )
+
+yaml_files = glob(os.path.join(maps_dir, "*.yaml"))
+
+map_file = yaml_files[0] if yaml_files else None
 
 params_file = os.path.join(
     get_package_share_directory("mirte_launch"),
