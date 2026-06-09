@@ -11,6 +11,7 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from ament_index_python.packages import get_package_share_directory
 import os
 
+#This is stored from the 'maps' directory by the setup.py file
 maps_dir = os.path.join(
     get_package_share_directory("mirte_launch"),
     "maps"
