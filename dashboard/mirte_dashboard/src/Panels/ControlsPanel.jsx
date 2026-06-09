@@ -2,7 +2,7 @@ import { useRef } from "react";
 import Panel from './Panel';
 
 const LINEAR_SPEED = 1.4;
-const ANGULAR_SPEED = 0.7;
+const ANGULAR_SPEED = 1.4;
 
 export default function ControlsPanel({
   moveRobot,
@@ -103,7 +103,7 @@ export default function ControlsPanel({
         <button
           className="controlButton"
           onClick={() =>
-            sendArmPose([0, 0, -1.5, 0])
+            sendArmPose([0, 0, -1, 0])
           }
         >
           Low

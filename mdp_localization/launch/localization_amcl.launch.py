@@ -47,7 +47,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "map",
-                default_value="/home/zheng/ros2_ws/src/mdp_mirte_master/maps/greenhouse_map.yaml",
+                default_value="/home/nikolaos/mdp_demo_ws/src/mdp_mirte_master/maps/greenhouse_map.yaml",
                 description="Full path to the map yaml file.",
             ),
             DeclareLaunchArgument(
