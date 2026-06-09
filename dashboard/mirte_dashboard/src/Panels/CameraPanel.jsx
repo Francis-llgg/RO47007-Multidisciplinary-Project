@@ -21,7 +21,6 @@ export default function CameraPanel({
             src={cameraImage}
             alt="Snapshot"
             classname="snapshot-image"
-            }}
           />
 
           <div className="snapshot-metadata">
