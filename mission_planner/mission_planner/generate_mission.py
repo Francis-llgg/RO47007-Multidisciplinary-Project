@@ -47,6 +47,12 @@ class MissionGenerator(Node):
         self.get_logger().info(f"Map resolution = {res:.3f} m/cell")
         ox = msg.info.origin.position.x
         oy = msg.info.origin.position.y
+        
+        self.map_min_x = ox
+        self.map_min_y = oy
+
+        self.map_max_x = ox + width * res
+        self.map_max_y = oy + height * res
 
         visited = [False] * (width * height)
         clusters = []
@@ -138,12 +144,15 @@ class MissionGenerator(Node):
 
         tables = []
 
-        row_offset = 0.5
-        step = 0.3
+        row_offset = 0.3
+        step = 0.2
 
         def valid_pose(p):
             x, y, _ = p["pose"]
-            return 0.3 < x < 4.7 and 0.3 < y < 9.7
+            return (
+                 self.map_min_x + 0.1 < x < self.map_max_x - 0.1
+                 and self.map_min_y + 0.1 < y < self.map_max_y - 0.1
+            )
 
         for i, table in enumerate(clusters):
 
@@ -193,9 +202,15 @@ class MissionGenerator(Node):
                     {"name": "pose_2", "pose": [round(cx, 3), round(row_B_y, 3), 0.0]},
                     {"name": "pose_3", "pose": [round(cx + step, 3), round(row_B_y, 3), 0.0]},
                 ]
+            
+            self.get_logger().info(f"T{i+1} raw A = {scan_points_A}")
+            self.get_logger().info(f"T{i+1} raw B = {scan_points_B}")
 
             scan_points_A = [p for p in scan_points_A if valid_pose(p)]
             scan_points_B = [p for p in scan_points_B if valid_pose(p)]
+
+            self.get_logger().info(f"T{i+1} filtered A = {scan_points_A}")
+            self.get_logger().info(f"T{i+1} filtered B = {scan_points_B}")
 
             tables.append({
                 "table_id": table_id,
@@ -217,7 +232,7 @@ class MissionGenerator(Node):
         output = {"tables": tables}
 
         out_path = os.path.expanduser(
-            "~/proj_ws/src/mdp_mirte_master/mission_planner/config/tables_generated.yaml"
+            "~/proj_ws/src/mdp_mirte_master/mission_planner/config/tables.yaml"
         )
 
         with open(out_path, "w") as f:
