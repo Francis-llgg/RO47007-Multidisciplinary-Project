@@ -32,22 +32,24 @@ export default function App() {
             battery={battery}
           />
 
-          <LiveCameraPanel
-            liveCamera={liveCamera}
-          />
-
           <ClickedPointPanel
             clickedPoint={clickedPoint}
-          />
-
-          <CameraPanel
-            cameraImage={cameraImage}
-            latestObservation={latestObservation}
           />
 
           <ControlsPanel
             moveRobot={moveRobot}
             sendArmPose={sendArmPose}
+          />
+        </div>
+
+        <div className="sidebar">
+          <LiveCameraPanel
+            liveCamera={liveCamera}
+          />
+
+          <CameraPanel
+            cameraImage={cameraImage}
+            latestObservation={latestObservation}
           />
         </div>
       </div>

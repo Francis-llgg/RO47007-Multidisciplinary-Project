@@ -12,7 +12,7 @@ import os
 map_file = os.path.join(
     get_package_share_directory("mirte_launch"),
     "maps",
-    "map.yaml"
+    "greenhouse_map.yaml"
 )
 
 params_file = os.path.join(

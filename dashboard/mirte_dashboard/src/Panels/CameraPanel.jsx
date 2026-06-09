@@ -4,6 +4,15 @@ export default function CameraPanel({
   cameraImage,
   latestObservation,
 }) {
+  const flowerData = latestObservation?.metadata.flower_lengths;
+  const greenhouseData = latestObservation?.metadata.greenhouse_tag_reading;
+
+  const units = {
+    temperature: '°C',
+    humidity: '%',
+    soil_moisture: '',
+  };
+
   return (
     <Panel title="Latest Snapshot">
       {cameraImage ? (
@@ -11,42 +20,66 @@ export default function CameraPanel({
           <img
             src={cameraImage}
             alt="Snapshot"
-            style={{
-              width: '100%',
-              height: 'auto',
-            }}
+            className="snapshot-image"
           />
 
-          {latestObservation?.metadata && (
-            <div style={{ marginTop: '1rem' }}>
-              <h4>Metadata</h4>
+          <div className="snapshot-metadata">
+            {flowerData && (
+              <div className="metadata-section">
+                <h4>Flowers</h4>
 
-              <div>
-                <strong>Flower Lengths</strong>
-                <pre>
-                  {JSON.stringify(
-                    latestObservation.metadata.flower_lengths,
-                    null,
-                    2
-                   )}
-                </pre>
-              </div>
+                <p>
+                  Detected: <strong>{flowerData.flower_count}</strong>
+                </p>
 
-              <div>
-                <strong>Greenhouse Reading</strong>
-                <pre>
-                  {JSON.stringify(
-                    latestObservation.metadata.greenhouse_reading,
-                    null,
-                    2
-                  )}
-                 </pre>
+                {flowerData.flowers?.map((flower) => (
+                  <div
+                    key={flower.id}
+                    className="flower-card"
+                  >
+                    <div>
+                      <strong>{flower.class_id}</strong>
+                    </div>
+
+                    <div>
+                      Length:{' '}
+                      {flower.estimated_length_cm.toFixed(1)} cm
+                    </div>
+
+                    <div>
+                      Confidence:{' '}
+                      {(flower.score * 100).toFixed(0)}%
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          )}
+            )}
+
+            {greenhouseData && (
+              <div className="metadata-section">
+                <h4>Greenhouse Reading</h4>
+
+                <p>
+                  Tag ID: <strong>{greenhouseData.tag_id}</strong>
+                </p>
+
+                {greenhouseData.readings?.map((reading) => (
+                  <div key={reading.name}>
+                    <strong>{reading.name}:</strong>{' '}
+                    {typeof reading.value === 'number'
+                      ? reading.value.toFixed(1)
+                      : reading.value}
+                    {units[reading.name]
+                      ? ` ${units[reading.name]}`
+                      : ''}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </>
       ) : (
-        <p>No image received</p>
+        <p>No snapshot received</p>
       )}
     </Panel>
   );

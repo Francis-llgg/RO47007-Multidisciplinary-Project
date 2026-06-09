@@ -96,6 +96,7 @@ export default function useROS() {
       setLatestObservation(data);
 
       if (data.image_url) {
+        console.log("image_url:", data.image_url);
         setCameraImage(data.image_url);
       } else {
         setCameraImage(null);
