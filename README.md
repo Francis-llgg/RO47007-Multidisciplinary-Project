@@ -190,6 +190,10 @@ If running the dashboard with the robot:
 ```bash
 ros2 launch dashboard robot.launch.py
 ```
+2. If using an ethernet cable to connect to the robot:
+```bash
+ros2 launch dashboard robot.launch.py network:='ethernet'
+```
 
 ### Opening the Dashboard
 
