@@ -57,6 +57,7 @@ export default function useROS() {
 
     mapTopic.subscribe(setMap);
 
+/*
     const odomTopic = new ROSLIB.Topic({
       ros,
       name: '/odom',
@@ -70,6 +71,23 @@ export default function useROS() {
         yaw: quaternionToYaw(
           msg.pose.pose.orientation
         ),
+      });
+    });
+*/
+
+    const tfClient = new ROSLIB.TFClient({
+      ros,
+      fixedFrame: 'map',
+      angularThres: 0.01,
+      transThres: 0.01,
+      rate: 10.0,
+    });
+
+    tfClient.subscribe('base_link', (tf) => {
+      setRobotPos({
+        x: tf.translation.x,
+        y: tf.translation.y,
+        yaw: quaternionToYaw(tf.rotation),
       });
     });
 

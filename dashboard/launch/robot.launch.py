@@ -32,6 +32,13 @@ def generate_launch_description():
         "'"
     ])
 
+    tf_republisher = Node(
+        package="tf2_web_republisher",
+        executable="tf2_web_republisher",
+        name="tf2_web_republisher",
+        output="screen",
+    )
+
     dashboard = ExecuteProcess(
         cmd=[
             "bash",
