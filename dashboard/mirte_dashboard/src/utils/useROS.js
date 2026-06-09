@@ -148,7 +148,7 @@ export default function useROS() {
     return () => {
       batteryTopic.unsubscribe();
       mapTopic.unsubscribe();
-      odomTopic.unsubscribe();
+      //odomTopic.unsubscribe();
       latestObservationTopic.unsubscribe();
       ros.close();
     };
