@@ -4,8 +4,8 @@ export default function CameraPanel({
   cameraImage,
   latestObservation,
 }) {
-  const flowerData = latestObservation?.metadata.flower_lengths;
-  const greenhouseData = latestObservation?.metadata.greenhouse_tag_reading;
+  const flowerData = latestObservation?.metadata?.flower_lengths;
+  const greenhouseData = latestObservation?.metadata?.greenhouse_tag_reading;
 
   const units = {
     temperature: '°C',
@@ -43,7 +43,7 @@ export default function CameraPanel({
 
                     <div>
                       Length:{' '}
-                      {flower.estimated_length_cm.toFixed(1)} cm
+                      {flower.estimated_length_cm?.toFixed(1)} cm
                     </div>
 
                     <div>
@@ -55,7 +55,7 @@ export default function CameraPanel({
               </div>
             )}
 
-            {greenhouseData && (
+            {greenhouseData ? (
               <div className="metadata-section">
                 <h4>Greenhouse Reading</h4>
 
