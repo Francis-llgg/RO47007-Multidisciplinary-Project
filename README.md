@@ -4,13 +4,18 @@ This repository contains the ROS 2 software, simulation setup, mapping/localizat
 
 ## Repository overview
 
+- `dashboard/`: React dashboard for robot monitoring and control.
+- `flower_detector/`: YOLO flower/bug detection, AprilTag integration, and combined perception visualizations.
 - `greenhouse_setup/`: greenhouse layout and tag configuration files.
-- `worlds/`: generated Gazebo greenhouse worlds.
-- `scripts/`: helper scripts, including world generation.
-- `mirte_dashboard/`: React dashboard for robot monitoring and control.
-- `mdp_mapping/`: mapping workflow and map saving tools.
+- `led_strip/`: battery monitor to change led color if battery is low.
+- `maps/`: saved generated greenhouse maps.
+- `mdp_interfaces/`:
 - `mdp_localization/`: localization configuration.
-- `flower_detector/`: YOLO flower/bug detection, AprilTag integration, and combined perception visualization.
+- `mdp_mapping/`: mapping workflow and map saving tools.
+- `mdp_navigation/`: navigation workflow.
+- `mirte_launch/`: 
+- `mission_planner/`: allows for multiple assignments to the robot.
+- `perception_dashboard_bridge/`: connection from flower_detector to the dashboard.
 
 <!-- <details> 
 <summary>Set up Virtual Greenhouse Environment</summary>
