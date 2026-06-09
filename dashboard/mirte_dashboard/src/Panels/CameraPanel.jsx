@@ -5,7 +5,7 @@ export default function CameraPanel({
   latestObservation,
 }) {
   const flowerData = latestObservation?.metadata.flower_lengths;
-  const greenhouseData = latestObservation?.metadata.greenhouse_reading;
+  const greenhouseData = latestObservation?.metadata.greenhouse_tag_reading;
 
   const units = {
     temperature: '°C',
