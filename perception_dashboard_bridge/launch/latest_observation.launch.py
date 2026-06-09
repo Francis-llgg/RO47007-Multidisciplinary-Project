@@ -14,6 +14,18 @@ snapshot_dir = os.path.join(
 def generate_launch_description():
     print("snapshot_dir:", snapshot_dir, type(snapshot_dir))
     return LaunchDescription([
+      ExecuteProcess(
+            cmd=[
+                'python3',
+                '-m',
+                'http.server',
+                '8088',
+                '--directory',
+                snapshot_dir,
+            ],
+            output='screen',
+        ),
+
         Node(
             package='perception_dashboard_bridge',
             executable='latest_observation_publisher',
