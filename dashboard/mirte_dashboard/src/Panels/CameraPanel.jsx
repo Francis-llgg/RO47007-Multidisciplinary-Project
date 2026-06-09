@@ -55,7 +55,7 @@ export default function CameraPanel({
               </div>
             )}
 
-            {greenhouseData ? (
+            {greenhouseData && (
               <div className="metadata-section">
                 <h4>Greenhouse Reading</h4>
 
