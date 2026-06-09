@@ -4,14 +4,12 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch.launch_description_sources import (
-    AnyLaunchDescriptionSource,
     PythonLaunchDescriptionSource,
 )
 
 
 def generate_launch_description():
     use_sim_time = LaunchConfiguration("use_sim_time")
-    world = LaunchConfiguration("world")
     map_name = LaunchConfiguration("map_name")
     map_save_dir = LaunchConfiguration("map_save_dir")
 
@@ -32,19 +30,6 @@ def generate_launch_description():
         "config",
         "slam_toolbox.yaml",
     ])
-
-    gazebo_launch = IncludeLaunchDescription(
-        AnyLaunchDescriptionSource(
-            PathJoinSubstitution([
-                FindPackageShare("mirte_gazebo"),
-                "launch",
-                "gazebo_mirte_master_empty.launch.xml",
-            ])
-        ),
-        launch_arguments={
-            "world": world,
-        }.items(),
-    )
 
     slam_toolbox_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -121,17 +106,35 @@ def generate_launch_description():
         ],
     )
 
+    explore_node = Node(
+        package="explore_lite",
+        executable="explore",
+        name="explore",
+        output="screen",
+        parameters=[
+            {
+                "use_sim_time": use_sim_time,
+                "robot_base_frame": "base_link",
+                "return_to_init": False,
+                "costmap_topic": "map",
+                "costmap_updates_topic": "map_updates",
+                "visualize": True,
+                "planner_frequency": 0.2,
+                "progress_timeout": 30.0,
+                "potential_scale": 2.0,
+                "orientation_scale": 0.0,
+                "gain_scale": 0.5,
+                "transform_tolerance": 0.1,
+                "min_frontier_size": 0.3,
+            }
+        ],
+    )
+
     return LaunchDescription([
         DeclareLaunchArgument(
             "use_sim_time",
             default_value="true",
             description="Use simulation time if running in Gazebo.",
-        ),
-
-        DeclareLaunchArgument(
-            "world",
-            default_value="/home/zheng/ros2_ws/src/mdp_mirte_master/greenhouse_simulation/worlds/greenhouse.world",
-            description="Full path to the Gazebo world file.",
         ),
 
         DeclareLaunchArgument(
@@ -146,11 +149,11 @@ def generate_launch_description():
             description="Directory where maps and posegraphs are saved.",
         ),
 
-        gazebo_launch,
         slam_toolbox_launch,
         scan_filter_node,
         mapping_manager_node,
         nav2_launch,
+        explore_node,
         rviz_node,
     ])
  

@@ -213,18 +213,12 @@ source /opt/ros/humble/setup.bash
 source ~/ros2_ws/install/setup.bash
 ```
 
-### Mapping (start everything: Gazebo, 
-```bashslam_toolbox, scan filter, Nav2, RViz)
-ros2 launch mdp_mapping mapping.launch.py world:=/home/zheng/ros2_ws/src/mdp_mirte_master/greenhouse_simulation/worlds/greenhouse.world
+### Mapping (start SLAM, scan filter, Nav2, RViz, and explore)
+```bash
+ros2 launch mdp_mapping mapping.launch.py
 ```
 
-### Automatic mapping (run in mdp_mirte_master directory)
-```bash
-ros2 run explore_lite explore \
-  --ros-args \
-  -p use_sim_time:=true \
-  --params-file ~/ros2_ws/src/m-explore-ros2/explore/config/params.yaml
-  ```
+Gazebo is no longer started from this launch file. Bring up the robot or simulation separately, then run the mapping launch.
 
 ### Save map (after /map is being published)
 ```bash
