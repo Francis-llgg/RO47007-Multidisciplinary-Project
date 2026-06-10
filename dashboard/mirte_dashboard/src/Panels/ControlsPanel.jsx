@@ -94,10 +94,10 @@ export default function ControlsPanel({
         <button
           className="controlButton"
           onClick={() =>
-            sendArmPose([0, 0, 0, -1])
+            sendArmPose([-0.785, -0.35, -1.88, 1.456])
           }
         >
-          Up
+          Scan position
         </button>
 
         <button
@@ -106,7 +106,7 @@ export default function ControlsPanel({
             sendArmPose([0, 0, -1, 0])
           }
         >
-          Low
+          low
         </button>
       </div>
     </Panel>
