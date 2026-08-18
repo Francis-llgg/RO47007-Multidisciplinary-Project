@@ -47,48 +47,11 @@ The same ROS interfaces are used across Gazebo and the MIRTE Master robot, keepi
 
 ## System at a glance
 
-```mermaid
-flowchart LR
-    CAM[Gripper camera] --> YOLO[YOLO detector]
-    CAM --> TAG[AprilTag detector]
-    YOLO --> FUSION[Combined perception]
-    TAG --> FUSION
-    TAG --> SENSOR[Greenhouse tag reader]
-    SENSOR --> FUSION
-
-    LIDAR[2D LiDAR] --> FILTER[Self-scan filter]
-    FILTER --> SLAM[SLAM Toolbox]
-    ODOM[Odometry] --> SLAM
-    SLAM --> MAP[Occupancy map]
-    MAP --> NAV[Nav2]
-    MAP --> MISSION[Mission planner]
-    MISSION --> NAV
-    NAV --> DRIVE[Mobile base]
-
-    MAP --> UI[React dashboard]
-    FUSION --> BRIDGE[Observation bridge]
-    BRIDGE --> UI
-    UI --> NAV
-    BATTERY[Battery monitor] --> UI
-    BATTERY --> LED[LED status feedback]
-```
-
 <p align="center">
   <img src="docs/assets/ros-node-architecture.png" alt="ROS node and topic architecture" width="100%" />
   <br />
   <sub>ROS node-level architecture spanning perception, mapping/localization, navigation, mission planning, and supervision.</sub>
 </p>
-
-## End-to-end autonomy loop
-
-1. **Model** the greenhouse and generate a matching Gazebo world.
-2. **Map** the environment from LiDAR and odometry while filtering robot self-returns.
-3. **Persist** both the occupancy map and serialized SLAM pose graph.
-4. **Localize** with AMCL or `slam_toolbox` against the saved environment.
-5. **Extract** table clusters from the occupancy grid and generate row-level scan poses.
-6. **Navigate** through the mission with Nav2 and capture observations through a custom ROS 2 action.
-7. **Interpret** camera data with YOLO, AprilTags, scale-aware flower measurements, and greenhouse tag readings.
-8. **Supervise** the robot from the web dashboard with live map, perception, battery, and motion controls.
 
 ## Results
 
@@ -128,25 +91,6 @@ flowchart LR
 ├── mission_planner/                 # Map-to-mission generation and execution
 └── perception_dashboard_bridge/     # Latest-observation ROS/HTTP bridge
 ```
-
-<details>
-<summary><strong>Package responsibilities</strong></summary>
-
-| Package | Responsibility |
-|---|---|
-| `greenhouse_simulation` | Defines the greenhouse layout and generates `greenhouse.world` |
-| `mdp_mapping` | Launches Gazebo, SLAM, Nav2, RViz, scan filtering, and map persistence |
-| `mdp_localization` | Provides AMCL and SLAM Toolbox localization configurations |
-| `mdp_navigation` | Stores tuned Nav2 parameters for greenhouse navigation |
-| `mirte_launch` | Selects the simulation or real-robot execution path |
-| `mission_planner` | Detects table clusters, generates scan poses, navigates, and records observations |
-| `mdp_interfaces` | Defines the custom action contract used for scanning |
-| `flower_detector` | Runs the complete camera perception and measurement pipeline |
-| `perception_dashboard_bridge` | Publishes the latest saved observation and serves its files over HTTP |
-| `dashboard` | Presents maps, pose, battery, camera, observations, and operator controls |
-| `led_strip` | Converts battery state into visible onboard feedback |
-
-</details>
 
 ## Reproduction guide
 
