@@ -2,13 +2,14 @@
   <img src="docs/assets/mirte-master.jpg" alt="MIRTE Master mobile manipulator" width="520" />
 </p>
 
-<h1 align="center">Greenhouse Autonomy Stack</h1>
+<h1 align="center">MIRTE Greenhouse Autonomy</h1>
 
 <p align="center">
-  <strong>A ROS 2 autonomy, perception, and supervision stack for a mobile greenhouse robot—engineered from digital twin to physical deployment.</strong>
+  <strong>ROS 2 greenhouse autonomy for the <a href="https://mirte.org/en/robots/master/">MIRTE Master</a>—from digital twin and SLAM to perception, mission planning, and physical deployment.</strong>
 </p>
 
 <p align="center">
+  <a href="https://mirte.org/en/robots/master/"><img alt="MIRTE Master" src="https://img.shields.io/badge/MIRTE-Master-00A6D6?style=for-the-badge" /></a>
   <img alt="ROS 2 Humble" src="https://img.shields.io/badge/ROS_2-Humble-22314E?style=for-the-badge&logo=ros&logoColor=white" />
   <img alt="Gazebo" src="https://img.shields.io/badge/Gazebo-Simulation-F58113?style=for-the-badge&logo=gazebo&logoColor=white" />
   <img alt="Nav2" src="https://img.shields.io/badge/Nav2-Autonomy-00A6D6?style=for-the-badge" />
@@ -41,9 +42,9 @@ The 67-second demo presents the verified workflow in delivery order:
 
 ## Mission
 
-This repository contains the complete software stack developed by **Group 01** for the TU Delft **RO47007 Multidisciplinary Project**. The robot builds a greenhouse map, localizes itself, plans collision-free missions between plant rows, detects flowers and pests, associates measurements with AprilTags, and exposes its internal state through a browser-based operator dashboard.
+**MIRTE Greenhouse Autonomy** is a complete autonomous inspection stack built on TU Delft's open-source [MIRTE Master](https://mirte.org/en/robots/master/) mobile manipulator. The robot builds a greenhouse map, localizes itself, plans collision-free missions between plant rows, detects flowers and pests, associates measurements with AprilTags, and exposes its internal state through a browser-based operator dashboard.
 
-The same ROS interfaces are used across Gazebo and the MIRTE Master robot, keeping the transition from simulation to hardware explicit and testable.
+Developed by **Group 01** for the TU Delft **RO47007 Multidisciplinary Project**, the system uses the same ROS interfaces across the [official MIRTE Gazebo simulation](https://github.com/mirte-robot/mirte-gazebo) and the physical MIRTE Master, keeping the transition from simulation to hardware explicit and testable.
 
 ## Engineering highlights
 
