@@ -26,6 +26,19 @@
 
 ---
 
+## System demo
+
+[![Watch the ROS 2 mobile robot system demo](docs/demo/ros2-mobile-robot-demo-en-poster.jpg)](docs/demo/ros2-mobile-robot-demo-en.mp4)
+
+**[Watch the complete English demo video →](docs/demo/ros2-mobile-robot-demo-en.mp4)**
+
+The 67-second demo presents the verified workflow in delivery order:
+
+1. Real-world SLAM mapping and the final occupancy-grid result.
+2. Map-based autonomous navigation in Gazebo and RViz2.
+3. Autonomous Nav2 execution on the physical MIRTE robot.
+4. Onboard object detection with the final class, confidence and bounding-box output.
+
 ## Mission
 
 This repository contains the complete software stack developed by **Group 01** for the TU Delft **RO47007 Multidisciplinary Project**. The robot builds a greenhouse map, localizes itself, plans collision-free missions between plant rows, detects flowers and pests, associates measurements with AprilTags, and exposes its internal state through a browser-based operator dashboard.
