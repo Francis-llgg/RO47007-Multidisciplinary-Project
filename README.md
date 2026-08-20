@@ -29,9 +29,9 @@
 
 ## System demo
 
-[![Watch the ROS 2 mobile robot system demo](docs/demo/ros2-mobile-robot-demo-en-poster.jpg)](docs/demo/ros2-mobile-robot-demo-en.mp4)
+[![MIRTE Greenhouse Autonomy demo](docs/demo/mirte-greenhouse-autonomy-demo.gif)](docs/demo/ros2-mobile-robot-demo-en.mp4)
 
-**[Watch the complete English demo video →](docs/demo/ros2-mobile-robot-demo-en.mp4)**
+**[Watch the complete 67-second English demo →](docs/demo/ros2-mobile-robot-demo-en.mp4)**
 
 The 67-second demo presents the verified workflow in delivery order:
 
